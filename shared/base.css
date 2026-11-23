@@ -1,0 +1,13 @@
+@font-face{font-family:"Google Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url("fonts/google-sans-latin.woff2") format("woff2")}
+:root{--v:#4A2A80;--ink:#282834;--mut:#646587;--line:#E7E9F3;--bg:#F4F4F9;--warn-bg:#FFF6E0;--warn:#7A3A00;--r:14px}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:"Google Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.45}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--v);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+[hidden]{display:none!important}
+/* Volver al panel de experiencias: lo comparten los marcos móvil y web. */
+.volver{flex:none;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid #D0D4E6;border-radius:50%;background:#fff;color:var(--ink);transition:background-color .15s,border-color .15s}
+.volver:hover{background:#F8F8FC;border-color:#9A9BB8}
