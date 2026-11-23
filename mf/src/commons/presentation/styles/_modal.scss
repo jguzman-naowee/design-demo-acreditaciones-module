@@ -1,0 +1,62 @@
+// Modales que no cambian de tamaño mientras se usan.
+//
+// El modal del SDK abre con el tamaño de su contenido:
+//
+//     .nwt-modal__content { width: auto; max-width: var(--naotech-modal-max-width, 30rem); }
+//     .nwt-modal--visible { --pvt-component-height: auto; }
+//
+// O sea que el ancho lo estira un texto largo —los chips van con `white-space: nowrap`— y el
+// alto crece cada vez que algo salta de línea. QA lo reportó agregando permisos en «Nuevo tipo
+// de acreditado»: la caja se movía debajo del cursor.
+
+// El ancho deja de depender del contenido. El `min()` es para que en pantallas angostas el
+// modal siga encogiendo en vez de desbordar: sin él, un ancho fijo se sale de la pantalla.
+@mixin ancho-fijo($ancho) {
+  --naotech-modal-max-width: #{$ancho};
+
+  .nwt-modal__content {
+    width: min(#{$ancho}, calc(100vw - var(--naotech-sizing-32)));
+  }
+}
+
+// Para los modales cuyo contenido cambia de golpe: al elegir una persona aparecen su tarjeta,
+// un aviso y los campos del tipo, y reservarle hueco a todo eso dejaría un modal enorme vacío.
+// Acá el CUERPO tiene alto fijo y scrollea dentro, así que el modal no se mueve entre estados.
+//
+// El `min()` con el alto de la ventana es para que en una pantalla baja no se pase: el SDK ya
+// corta con `max-height: calc(100% - 48px)`, y sin esto el contenido quedaría recortado en vez
+// de scrollear.
+@mixin cuerpo-fijo($alto) {
+  height: min(#{$alto}, 55vh);
+  overflow-y: auto;
+  // En un contenedor flex el hijo no se encoge por debajo de su contenido sin esto, y el alto
+  // fijo se ignoraría.
+  min-height: 0;
+}
+
+// Una zona que crece —chips, resultados de una búsqueda— con su espacio RESERVADO y scroll
+// propio. Alto fijo y no `max-height` a propósito: con tope, el modal sigue creciendo hasta
+// llegar al tope, que es justo lo que se quiere evitar.
+//
+// `$filas` se cuenta en filas de chip: la altura del chip del SDK es `--naotech-sizing-32` y
+// entre filas hay `--naotech-sizing-8`.
+@mixin zona-fija($filas) {
+  @include zona-fija-alto(
+    calc(
+      #{$filas} * var(--naotech-sizing-32) + #{$filas - 1} *
+        var(--naotech-sizing-8)
+    )
+  );
+}
+
+// La misma idea cuando el alto se da en unidades y no en filas de chip.
+@mixin zona-fija-alto($alto) {
+  height: #{$alto};
+  overflow-y: auto;
+
+  // Sin esto, dentro de un cuerpo de alto fijo el `height` no se respeta: un hijo flex se
+  // encoge por debajo de su altura cuando falta espacio. Medido: la lista de candidatos pasaba
+  // de 256px a 30px al elegir a alguien, y se quedaba sin poder marcar a nadie más. El que
+  // tiene que ceder es el cuerpo, scrolleando.
+  flex: none;
+}

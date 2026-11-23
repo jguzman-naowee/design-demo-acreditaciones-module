@@ -1,0 +1,13 @@
+.nws-request-error {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  box-sizing: border-box;
+
+  // El NwtEmptyState espera una ilustración, no un glifo: el icono se agranda y
+  // se tiñe para que ocupe ese lugar.
+  .nwt-icon {
+    font-size: var(--naotech-sizing-56);
+    color: var(--naotech-app-negative-color, #d92d20);
+  }
+}

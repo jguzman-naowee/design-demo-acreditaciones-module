@@ -1,0 +1,173 @@
+// Certificados de participación: configuración y generación. Mismo lenguaje
+// visual del resto del módulo (tokens de foundations, BEM con prefijo nws-).
+@use '../../../../commons/presentation/styles/modal';
+
+.nws-certificates {
+  // El mismo esqueleto de página que el resto del módulo: la franja del evento a todo el
+  // ancho y el contenido debajo con su propio margen. Sin esto la pantalla arrancaba pegada
+  // al borde izquierdo y con otro ancho que las demás.
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-24);
+    padding: var(--naotech-sizing-28) var(--naotech-sizing-32);
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  // El título y su bajada, apilados: mismo patrón que el resto del módulo.
+  &__description {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  &__subtitle {
+    max-width: 640px;
+    // `--naotech-text-color-secondary` no existe en foundations: con él la bajada salía del
+    // mismo color que el título y las dos líneas competían. El token de la paleta sí existe
+    // y es el que usa el rótulo del evento.
+    color: var(--naotech-app-color-600);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-8);
+  }
+
+  &__general {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__switch {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-8);
+  }
+
+  &__template {
+    min-width: 220px;
+  }
+
+  &__section-title {
+    margin-bottom: var(--naotech-sizing-4);
+  }
+
+  &__hint {
+    margin-bottom: var(--naotech-sizing-12);
+    color: var(--naotech-text-color-secondary);
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+    padding: var(--naotech-sizing-8) 0;
+    border-bottom: var(--naotech-app-border-1-200);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__row-label {
+    flex: 1;
+  }
+
+  &__row-date {
+    width: 260px;
+  }
+
+  &__list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+    margin-bottom: var(--naotech-sizing-12);
+  }
+}
+
+// El modal de generación: por deporte o individual.
+//
+// Va SUELTO y no anidado en `.nws-certificates` porque la clase se le pasa al NwtModal, y el
+// SDK saca el modal por portal a `document.body`: anidado, sus reglas no llegarían nunca.
+//
+// El ancho es fijo, como en todos los modales del módulo. Antes esta pantalla era la única
+// que no usaba el mixin y forzaba `min-width: 420px` en el cuerpo: con los 30rem por defecto
+// del SDK el hueco para el contenido son 414px —480 menos los 8+8 de `__content` y los 24+24
+// de `__component`—, así que el cuerpo se salía 6px y el modal abría con barra de scroll
+// HORIZONTAL. Medido: `scrollWidth` 468 contra `clientWidth` 462.
+.nws-certificates-modal {
+  @include modal.ancho-fijo(32rem);
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-8);
+  }
+
+  // El alto de la lista es FIJO, no un tope. Con `max-height` el modal crecía al llegar los
+  // resultados de la búsqueda —medido: de 320px a 544px, un salto de 224px debajo del
+  // cursor— y volvía a moverse con cada búsqueda nueva. Acá buscar es el punto de la
+  // pantalla, así que el espacio se reserva desde que abre y la lista scrollea dentro. Es la
+  // misma decisión que en el modal de acreditar a una persona.
+  &__candidates {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-4);
+
+    @include modal.zona-fija-alto(15rem);
+  }
+
+  &__candidate {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: var(--naotech-sizing-8);
+    border: var(--naotech-app-border-1-200);
+    border-radius: var(--naotech-sizing-4);
+    background: var(--naotech-app-background);
+    cursor: pointer;
+    text-align: left;
+
+    &--picked {
+      border-color: var(--naotech-primary-color-normal);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: var(--naotech-sizing-12);
+    padding-top: var(--naotech-sizing-16);
+    border-top: var(--naotech-app-border-1-200);
+  }
+}

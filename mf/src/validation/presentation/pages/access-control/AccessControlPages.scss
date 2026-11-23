@@ -1,0 +1,104 @@
+.nws-access-control {
+
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-24);
+    padding: var(--naotech-sizing-28) var(--naotech-sizing-32);
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+    margin-bottom: var(--naotech-sizing-16);
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-12);
+  }
+
+  // El NwtDropdown no tiene prop ni token de ancho: hereda los ~200px
+  // intrínsecos de su input, y el diseño los quiere del tamaño de su etiqueta.
+  .nwt-dropdown {
+    width: 9rem;
+
+    input {
+      width: 100%;
+      min-width: 0rem;
+    }
+  }
+
+  // El usado va en el span exterior (que recibe la elipsis del SDK) y el tope en
+  // uno anidado, más chico y gris, como el diseño.
+  &__validations {
+    color: var(--naotech-app-link-color);
+    font-weight: var(--naotech-font-weight-semibold);
+
+    span {
+      font-weight: var(--naotech-font-weight-regular);
+      color: var(--naotech-app-color-600);
+    }
+  }
+
+  &__card {
+    // El header del NwtCard trae el padding de la tarjeta; la tira de pestañas
+    // va de borde a borde y su propio hairline hace de separador.
+    .nwt-card__header {
+      padding: 0rem var(--naotech-sizing-16);
+    }
+  }
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-20);
+  }
+
+  &__section {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-12);
+  }
+
+  &__history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  // NwtTitle trae el avatar con esquinas redondeadas; el diseño lo quiere
+  // circular.
+  .nwt-title {
+    --naotech-avatar-radius: 50%;
+  }
+}

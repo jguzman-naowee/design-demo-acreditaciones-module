@@ -1,0 +1,168 @@
+// Mismo ancho y mismo respiro que las demás pantallas del módulo (.nws-delivery): esta es
+// una pantalla más, no un diálogo, y centrarla en una columna estrecha la hacía parecer otra
+// aplicación.
+.nws-event-entry {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  // Las celdas del datatable no declaran flex, así que un nombre largo estira su celda por
+  // encima del width: N% y desalinea la fila del encabezado. Mismo arreglo que en Entrega.
+  .nwt-datatable__title,
+  .nwt-datatable__cell {
+    flex-grow: 0;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-24);
+    padding: var(--naotech-sizing-28) var(--naotech-sizing-32);
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-8);
+
+    small {
+      color: var(--naotech-app-color-600);
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: var(--naotech-sizing-12);
+
+    .nwt-searchbox {
+      --naotech-searchbox-width: 100%;
+
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  &__reading {
+    color: var(--naotech-app-color-600);
+  }
+
+  // El NwtAlert estira su etiqueta a todo el ancho: sin esto, el nombre del evento y el
+  // botón quedaban en extremos opuestos de la pantalla.
+  &__current {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--naotech-sizing-4) var(--naotech-sizing-8);
+  }
+
+  &__phases {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--naotech-sizing-12);
+    // Es una lista por semántica, no por aspecto: el punto del marcador sobraba.
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  // Al pasar la pantalla a ancho completo, los botones sueltos se estiraban de borde a
+  // borde: solo ocupan lo suyo.
+  &__back {
+    align-self: flex-start;
+  }
+
+  // El nombre del evento ES el disparador de la fila: se hace clic en toda la celda, no en
+  // una flechita de 16 px.
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--naotech-sizing-8);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: inherit;
+    text-align: left;
+    font: inherit;
+  }
+
+  &__chevron {
+    flex: none;
+    color: var(--naotech-app-color-600);
+    transition: transform 150ms var(--naotech-animation-standard);
+
+    &--open {
+      transform: rotate(90deg);
+    }
+  }
+
+  // La fila hija ocupa el ancho completo de la tabla y se distingue del resto por el fondo,
+  // que es lo que la ata visualmente a su evento.
+  &__phases-row {
+    background-color: var(--naotech-app-color-050);
+  }
+
+  // La fila desplegada ocupa la fila entera.
+  //
+  // La celda llevaba `nwt-width-xs-100`, una clase que NO EXISTE en el SDK —la escala llega
+  // a 97-5—, así que no aplicaba nada: la celda se quedaba en 327 px de los 1268 de la fila.
+  // Las fases salían apelotonadas contra el borde izquierdo y media tabla quedaba vacía a su
+  // derecha. Lo reportó QA con una flecha del montón al hueco.
+  &__phases-row .nwt-datatable__cell {
+    width: 100%;
+  }
+
+  &__phase-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    // La celda es flex, así que la lista se encogía a su contenido: con la celda ya a 1275 px
+    // los `li` seguían midiendo 327 y las columnas de abajo se calculaban sobre eso.
+    width: 100%;
+
+    // Las MISMAS proporciones que la cabecera (60 / 25 / resto), para que la fecha de la
+    // fase caiga bajo «Inicio» y su botón bajo la columna de acciones, como la fila del
+    // evento que hay justo encima. Con flex, los tres se amontonaban a la izquierda.
+    li {
+      display: grid;
+      grid-template-columns: 60% 25% 1fr;
+      align-items: center;
+      gap: var(--naotech-sizing-16);
+    }
+
+    // La sangría va en la primera celda y NO en la lista: puesta en el `ul` corría las tres
+    // columnas y la alineación con la cabecera se perdía por esos 24 px.
+    li > :first-child {
+      padding-left: var(--naotech-sizing-24);
+    }
+
+    // La fecha de la fase, que es el dato que no manda el catálogo: se lee como apoyo del
+    // nombre, no compitiendo con él.
+    li > span:nth-child(2) {
+      color: var(--naotech-app-color-600);
+    }
+
+    li > :last-child {
+      justify-self: end;
+    }
+  }
+
+  &__phases-error {
+    color: var(--naotech-negative-color-600);
+  }
+}

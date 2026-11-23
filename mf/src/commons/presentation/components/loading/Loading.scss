@@ -1,0 +1,14 @@
+.nws-loading {
+  --naotech-spinner-dimesion: var(--naotech-sizing-40);
+  --naotech-spinner-border-width: 6px;
+
+  display: flex;
+  width: 100%;
+  height: var(--naotech-loading-height, auto);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: var(--naotech-sizing-16);
+  padding: var(--naotech-loading-padding, var(--naotech-sizing-32));
+  box-sizing: border-box;
+}

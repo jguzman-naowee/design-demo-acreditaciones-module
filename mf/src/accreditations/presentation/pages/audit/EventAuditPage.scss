@@ -1,0 +1,113 @@
+@use '../../../../commons/presentation/styles/modal';
+
+.nws-audit {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-24);
+    // El mismo respiro que el resto del módulo (`.nws-delivery__content`): sin los 32 de los
+    // lados, el título y «Descargar reporte» quedaban pegados a los bordes.
+    padding: var(--naotech-sizing-28) var(--naotech-sizing-32);
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+    min-width: 0rem;
+  }
+
+  // SIN `flex-wrap`: al envolverse, el portal de la lista del NwtDropdown se posiciona mal y
+  // cae encima de lo que tenga al lado. Está medido en los lotes. Acá solo hay un enlace, así
+  // que no hay nada que envolver.
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-12);
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-16);
+  }
+
+  // Las dos filas envuelven en vez de comprimir, igual que las de entrega: el buscador ya no
+  // cede (commons/presentation/styles/_searchbox.scss) y sin esto la fila se desbordaría.
+  &__filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--naotech-sizing-12);
+    flex: 1 1 auto;
+    min-width: 0rem;
+
+    // ACÁ HABÍA UN TERCER APAÑO del mismo fallo —`--naotech-searchbox-width: 100%` con
+    // `min-width: 0` y `max-width: 24rem`, y el comentario «con el ancho por defecto del SDK
+    // se recortaba solo»—. El mismo problema estaba parcheado de TRES formas distintas en
+    // tres pantallas: 17.5rem en los movimientos, esto en la auditoría, y nada en el listado
+    // principal, que es donde lo vio Andrés.
+    //
+    // Y este además se rompía por otro lado: con `min-width: 0` el buscador cedía hasta CERO
+    // cuando los desplegables llenaban la fila. Medido a 1280: 0px de ancho útil.
+    //
+    // Ahora el ancho lo pone una sola regla del módulo. Acá solo queda lo que es de esta
+    // pantalla: que los desplegables no se estiren.
+    .nwt-dropdown {
+      flex: none;
+    }
+  }
+}
+
+// El selector de columnas del reporte.
+.nws-audit-report {
+  @include modal.ancho-fijo(32rem);
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-20);
+  }
+
+  // Dos columnas: seis casillas en una sola fila vertical dejaban el modal más alto que ancho
+  // por nada.
+  &__columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--naotech-sizing-12);
+  }
+
+  &__column {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-8);
+    // El rótulo entero es pulsable, no solo la casilla de 20px.
+    cursor: pointer;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

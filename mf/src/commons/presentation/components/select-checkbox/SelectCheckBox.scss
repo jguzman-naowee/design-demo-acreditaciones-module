@@ -1,0 +1,38 @@
+// El NwtCheckBox pinta su estado con los glifos 'done' e 'indeterminate', que
+// NO existen en la fuente de iconos del SDK, y --indeterminate no trae ninguna
+// regla CSS. Sin esto, marcado se ve como un cuadro relleno sin palomita e
+// indeterminado es indistinguible de vacío. Se dibujan con pseudo-elementos.
+.nws-select-checkbox {
+  display: inline-flex;
+
+  .nwt-checkbox__control {
+    position: relative;
+
+    .nwt-icon {
+      display: none;
+    }
+  }
+
+  .nwt-checkbox--checked .nwt-checkbox__control::after {
+    content: '';
+    position: absolute;
+    width: var(--naotech-sizing-5, 0.3125rem);
+    height: var(--naotech-sizing-10, 0.625rem);
+    border: solid var(--naotech-primary-color-text-normal);
+    border-width: 0rem 2px 2px 0rem;
+    transform: translateY(-1px) rotate(45deg);
+  }
+
+  .nwt-checkbox--indeterminate .nwt-checkbox__control {
+    background: var(--naotech-primary-color-normal);
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: var(--naotech-sizing-10, 0.625rem);
+      height: 2px;
+      border-radius: 1px;
+      background: var(--naotech-primary-color-text-normal);
+    }
+  }
+}

@@ -1,0 +1,77 @@
+// Los tokens tipográficos que el anfitrión pide y no tiene, resueltos DENTRO del módulo.
+//
+// EL PROBLEMA, medido en suite-web-v2 (2026-09-08)
+// ─────────────────────────────────────────────────
+// En la suite TODA la tipografía del módulo se aplasta a 16px: `nwt-h4/h5/h6-font-bold`,
+// `nwt-smalltext-font-regular`… todas. En el cascarón suelto resuelven a 28/24/20/14px.
+//
+// La cadena, en tres pasos:
+//
+// 1. `.nwt-h5-font-bold` solo declara `font-weight`. El TAMAÑO sale de un selector agrupado
+//    —`.nwt-h5-font-default, .nwt-h5-font-bold, … { font-size: … }`— que el SDK genera con
+//    un `@extend`.
+// 2. La suite carga `@naowee-tech/styles-foundations`, que declara ESE MISMO selector
+//    agrupado, y lo hace SIN CAPA. Nuestra copia vive dentro de
+//    `@layer nws-accreditations-foundations`, y cualquier regla sin capa le gana a
+//    cualquier regla en capa. Así que la suya es la que aplica.
+// 3. La suya pide `var(--nwt-heading5-font-size)` … y ese token NO EXISTE. Comprobado sobre
+//    el CSS compilado que sirve la suite (`/styles.css`, 204 KB): 48 tokens `--nwt-*`
+//    referenciados, CERO definidos. Ni en su código ni en ningún paquete `@naowee-tech`
+//    instalado —`foundations` solo trae los cuatro pesos, y bajo el prefijo `--naotech-*`—.
+//
+// Un `var()` que no resuelve no es un error de sintaxis: la declaración GANA la cascada y
+// después se invalida, así que `font-size` cae a heredado (16px del body) en vez de dejar
+// pasar a la de abajo. De ahí que se vea plano y no roto.
+//
+// Es un bug de la suite, no nuestro: `styles-foundations` 2.0 renombró el prefijo de sus
+// tokens de `--naotech-*` a `--nwt-*` y nadie publicó los nuevos. Su tabla tipográfica
+// entera es CSS muerto. No se nota en sus pantallas porque la suite no usa ni una sola de
+// esas clases (medido: 0 apariciones en su `src/`); solo se nota en los remotes, que sí las
+// usan. Lo mismo le pasa a los selectores de elemento `h1`…`h6`, que también declara.
+//
+// EL ARREGLO
+// ──────────
+// No duplicamos la tabla tipográfica: le damos valor a los tokens que le faltan, apuntando
+// a los nuestros, y acotado a nuestro marcado. Con eso la regla del anfitrión —que va a
+// ganar igual— resuelve bien dentro del módulo. Arregla de una vez las clases, los
+// `h1`…`h6` y cualquier clase que el SDK añada mañana.
+//
+// Las variables se HEREDAN, y ahí está la gracia: basta declararlas en la raíz de cada
+// subárbol nuestro. Son dos, y por eso esto no cuesta nada:
+//
+//   - `.nws-accreditations-module` en el `NwtApplication` (AccreditationsApp) — todas las
+//     pantallas;
+//   - la misma clase en la raíz de cada modal, que el SDK saca por portal a `document.body`
+//     y por tanto queda FUERA del árbol de la aplicación. La pone `NwsModal`, que existe
+//     justo para que no se olvide.
+//
+// La clase es propia y con nombre largo A PROPÓSITO. El prefijo `nws-` NO alcanza para
+// acotar: la suite lo usa también (medido: 1039 apariciones en su `src/`, `nws-profile-page`,
+// `nws-scoring-*`…). Acotar con `[class*='nws-']` le habría cambiado la tipografía a sus
+// pantallas, que es exactamente lo que la capa está para evitar.
+//
+// ESTO SE BORRA cuando `styles-foundations` publique sus tokens `--nwt-*` (o vuelva a
+// `--naotech-*`). Mientras tanto es un parche encima de un bug ajeno, y el resto de la suite
+// sigue plano: hay que reportarlo a quien mantenga ese paquete.
+
+// Los once nombres de la escala, tal cual los declara el SDK en
+// `scss/utilities/typographics.scss` y los consume `styles-foundations`. Si el sistema de
+// diseño añade uno, va acá.
+$escalas:
+  heading1, heading2, heading3, heading4, heading5, heading6, subtitle, body,
+  smalltext, caption, overline;
+
+$pesos: regular, medium, semibold, bold;
+
+.nws-accreditations-module {
+  @each $escala in $escalas {
+    --nwt-#{$escala}-font-size: var(--naotech-#{$escala}-font-size);
+    --nwt-#{$escala}-letter-spacing: var(--naotech-#{$escala}-letter-spacing);
+    --nwt-#{$escala}-line-height: var(--naotech-#{$escala}-line-height);
+    --nwt-#{$escala}-font-weight: var(--naotech-#{$escala}-font-weight);
+  }
+
+  @each $peso in $pesos {
+    --nwt-font-weight-#{$peso}: var(--naotech-font-weight-#{$peso});
+  }
+}

@@ -1,0 +1,60 @@
+.nws-event-bar {
+  // El SDK declara `width: 100%` con padding y SIN box-sizing, así que la franja se pasaba
+  // 24px del ancho disponible y sacaba scroll horizontal en toda la sección. Medido en la
+  // auditoría: 1349 dentro de un padre de 1325.
+  box-sizing: border-box;
+  background: var(--naotech-app-background);
+
+  // El mismo aire por los cuatro lados, y el alto libre. Copiado de la demo, con su
+  // motivo: el SDK deja `padding: 8px 12px` MÁS un `min-height: 56px`, y esa combinación
+  // descuadra —el mínimo estira la caja por abajo y el contenido queda pegado arriba—. Con
+  // el alto libre, el relleno es lo único que manda.
+  //
+  // NO se copia su margen negativo de -32px: allá sirve para salirse del `padding: 32px`
+  // de `.nwt-app__content`, y acá está medido que la cadena de ancestros va con relleno 0 y
+  // la banda ya ocupa todo el ancho. Aplicarlo la sacaría fuera del contenedor.
+  min-height: 0;
+  padding: var(--naotech-sizing-16);
+
+  // El SDK redondea las dos esquinas de abajo (`0 0 20px 20px`) y eso la hace leerse como
+  // el pie de una tarjeta. La banda es la continuación del encabezado, no una tarjeta: va
+  // cuadrada, como en la demo.
+  border-radius: 0;
+
+  .nwt-subheader__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // Envuelve antes que comprimir: con tres contadores más el evento, en un portátil no
+    // siempre caben en una fila. No hay ningún NwtDropdown acá dentro, que es lo que se rompe
+    // al envolver —su portal se posiciona mal—; si algún día entra uno, esto hay que medirlo.
+    flex-wrap: wrap;
+    gap: var(--naotech-sizing-16);
+  }
+
+  // El evento ocupa lo suyo y no más: sin esto se estira y empuja los contadores contra el
+  // borde derecho.
+  .nwt-subheader__body {
+    flex: 0 0 auto;
+  }
+
+  // Los contadores toman el espacio que sobra y se centran en él, en vez de quedar pegados
+  // al extremo. Es como se ve en el diseño: el evento a la izquierda y el retrato repartido
+  // en el resto de la franja, no aplastado contra el borde.
+  .nwt-subheader__actions {
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  // Con más aire entre los dos contadores la franja se ve ocupada y no apretada a un lado.
+  .nwt-detail-group {
+    gap: var(--naotech-sizing-40);
+  }
+
+  // El DS pinta este recuadro de 40px blanco —invisible sobre la franja—; el SDK lo dejó gris,
+  // que sobre blanco se ve como un cuadro.
+  .nwt-detail-item__icon {
+    background: transparent;
+  }
+}

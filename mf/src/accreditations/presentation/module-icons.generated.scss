@@ -1,0 +1,591 @@
+// GENERADO por scripts/generar-iconos-del-modulo.mjs — no editar a mano.
+//
+// El set de iconos del módulo: familia propia y acotado a nuestro marcado, para no pisarle
+// los suyos al anfitrión. El porqué está en el script.
+
+[class*='nwt-'] [class^='naotech-icon-'],
+[class*='nws-'] [class^='naotech-icon-'],
+[class*='nwt-'] [class*=' naotech-icon-'],
+[class*='nws-'] [class*=' naotech-icon-'] {
+  font-family: '-naotech-icons-nws' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class*='nwt-'] .naotech-icon-arrow-down::before,
+[class*='nws-'] .naotech-icon-arrow-down::before {
+  content: '\e900';
+}
+[class*='nwt-'] .naotech-icon-arrow-left::before,
+[class*='nws-'] .naotech-icon-arrow-left::before {
+  content: '\e901';
+}
+[class*='nwt-'] .naotech-icon-arrow-right-up::before,
+[class*='nws-'] .naotech-icon-arrow-right-up::before {
+  content: '\e902';
+}
+[class*='nwt-'] .naotech-icon-arrow-right::before,
+[class*='nws-'] .naotech-icon-arrow-right::before {
+  content: '\e903';
+}
+[class*='nwt-'] .naotech-icon-arrow-up::before,
+[class*='nws-'] .naotech-icon-arrow-up::before {
+  content: '\e904';
+}
+[class*='nwt-'] .naotech-icon-chevron-down::before,
+[class*='nws-'] .naotech-icon-chevron-down::before {
+  content: '\e905';
+}
+[class*='nwt-'] .naotech-icon-chevron-left::before,
+[class*='nws-'] .naotech-icon-chevron-left::before {
+  content: '\e906';
+}
+[class*='nwt-'] .naotech-icon-chevron-right::before,
+[class*='nws-'] .naotech-icon-chevron-right::before {
+  content: '\e907';
+}
+[class*='nwt-'] .naotech-icon-chevron-up::before,
+[class*='nws-'] .naotech-icon-chevron-up::before {
+  content: '\e908';
+}
+[class*='nwt-'] .naotech-icon-close::before,
+[class*='nws-'] .naotech-icon-close::before {
+  content: '\e909';
+}
+[class*='nwt-'] .naotech-icon-drawer::before,
+[class*='nws-'] .naotech-icon-drawer::before {
+  content: '\e90a';
+}
+[class*='nwt-'] .naotech-icon-fallback::before,
+[class*='nws-'] .naotech-icon-fallback::before {
+  content: '\e90b';
+}
+[class*='nwt-'] .naotech-icon-helper::before,
+[class*='nws-'] .naotech-icon-helper::before {
+  content: '\e90c';
+}
+[class*='nwt-'] .naotech-icon-info::before,
+[class*='nws-'] .naotech-icon-info::before {
+  content: '\e90d';
+}
+[class*='nwt-'] .naotech-icon-overflow-menu-horizontal::before,
+[class*='nws-'] .naotech-icon-overflow-menu-horizontal::before {
+  content: '\e90e';
+}
+[class*='nwt-'] .naotech-icon-overflow-menu-vertical::before,
+[class*='nws-'] .naotech-icon-overflow-menu-vertical::before {
+  content: '\e90f';
+}
+[class*='nwt-'] .naotech-icon-placeholder-image::before,
+[class*='nws-'] .naotech-icon-placeholder-image::before {
+  content: '\e910';
+}
+[class*='nwt-'] .naotech-icon-refresh::before,
+[class*='nws-'] .naotech-icon-refresh::before {
+  content: '\e911';
+}
+[class*='nwt-'] .naotech-icon-cbt::before,
+[class*='nws-'] .naotech-icon-cbt::before {
+  content: '\e912';
+}
+[class*='nwt-'] .naotech-icon-delivery::before,
+[class*='nws-'] .naotech-icon-delivery::before {
+  content: '\e913';
+}
+[class*='nwt-'] .naotech-icon-dispatch-time::before,
+[class*='nws-'] .naotech-icon-dispatch-time::before {
+  content: '\e914';
+}
+[class*='nwt-'] .naotech-icon-fast-shipping::before,
+[class*='nws-'] .naotech-icon-fast-shipping::before {
+  content: '\e915';
+}
+[class*='nwt-'] .naotech-icon-gps-pin-filled::before,
+[class*='nws-'] .naotech-icon-gps-pin-filled::before {
+  content: '\e916';
+}
+[class*='nwt-'] .naotech-icon-gps-pin::before,
+[class*='nws-'] .naotech-icon-gps-pin::before {
+  content: '\e917';
+}
+[class*='nwt-'] .naotech-icon-package::before,
+[class*='nws-'] .naotech-icon-package::before {
+  content: '\e918';
+}
+[class*='nwt-'] .naotech-icon-pick-up::before,
+[class*='nws-'] .naotech-icon-pick-up::before {
+  content: '\e919';
+}
+[class*='nwt-'] .naotech-icon-pin-pick-up::before,
+[class*='nws-'] .naotech-icon-pin-pick-up::before {
+  content: '\e91a';
+}
+[class*='nwt-'] .naotech-icon-post-office-shipping::before,
+[class*='nws-'] .naotech-icon-post-office-shipping::before {
+  content: '\e91b';
+}
+[class*='nwt-'] .naotech-icon-return::before,
+[class*='nws-'] .naotech-icon-return::before {
+  content: '\e91c';
+}
+[class*='nwt-'] .naotech-icon-shipping-agreement::before,
+[class*='nws-'] .naotech-icon-shipping-agreement::before {
+  content: '\e91d';
+}
+[class*='nwt-'] .naotech-icon-shipping::before,
+[class*='nws-'] .naotech-icon-shipping::before {
+  content: '\e91e';
+}
+[class*='nwt-'] .naotech-icon-avatar-new::before,
+[class*='nws-'] .naotech-icon-avatar-new::before {
+  content: '\e91f';
+}
+[class*='nwt-'] .naotech-icon-avatar::before,
+[class*='nws-'] .naotech-icon-avatar::before {
+  content: '\e920';
+}
+[class*='nwt-'] .naotech-icon-contact-new::before,
+[class*='nws-'] .naotech-icon-contact-new::before {
+  content: '\e921';
+}
+[class*='nwt-'] .naotech-icon-mercado-lider::before,
+[class*='nws-'] .naotech-icon-mercado-lider::before {
+  content: '\e922';
+}
+[class*='nwt-'] .naotech-icon-privacy::before,
+[class*='nws-'] .naotech-icon-privacy::before {
+  content: '\e923';
+}
+[class*='nwt-'] .naotech-icon-user::before,
+[class*='nws-'] .naotech-icon-user::before {
+  content: '\e924';
+}
+[class*='nwt-'] .naotech-icon-bank-transfer::before,
+[class*='nws-'] .naotech-icon-bank-transfer::before {
+  content: '\e925';
+}
+[class*='nwt-'] .naotech-icon-bill::before,
+[class*='nws-'] .naotech-icon-bill::before {
+  content: '\e926';
+}
+[class*='nwt-'] .naotech-icon-boleto::before,
+[class*='nws-'] .naotech-icon-boleto::before {
+  content: '\e927';
+}
+[class*='nwt-'] .naotech-icon-cash::before,
+[class*='nws-'] .naotech-icon-cash::before {
+  content: '\e928';
+}
+[class*='nwt-'] .naotech-icon-charge::before,
+[class*='nws-'] .naotech-icon-charge::before {
+  content: '\e929';
+}
+[class*='nwt-'] .naotech-icon-credit-card::before,
+[class*='nws-'] .naotech-icon-credit-card::before {
+  content: '\e92a';
+}
+[class*='nwt-'] .naotech-icon-debit-card::before,
+[class*='nws-'] .naotech-icon-debit-card::before {
+  content: '\e92b';
+}
+[class*='nwt-'] .naotech-icon-deposit::before,
+[class*='nws-'] .naotech-icon-deposit::before {
+  content: '\e92c';
+}
+[class*='nwt-'] .naotech-icon-express-point::before,
+[class*='nws-'] .naotech-icon-express-point::before {
+  content: '\e92d';
+}
+[class*='nwt-'] .naotech-icon-mercado-pago-card::before,
+[class*='nws-'] .naotech-icon-mercado-pago-card::before {
+  content: '\e92e';
+}
+[class*='nwt-'] .naotech-icon-payment::before,
+[class*='nws-'] .naotech-icon-payment::before {
+  content: '\e92f';
+}
+[class*='nwt-'] .naotech-icon-phone-top-up::before,
+[class*='nws-'] .naotech-icon-phone-top-up::before {
+  content: '\e930';
+}
+[class*='nwt-'] .naotech-icon-point-2::before,
+[class*='nws-'] .naotech-icon-point-2::before {
+  content: '\e931';
+}
+[class*='nwt-'] .naotech-icon-point-smart::before,
+[class*='nws-'] .naotech-icon-point-smart::before {
+  content: '\e932';
+}
+[class*='nwt-'] .naotech-icon-point::before,
+[class*='nws-'] .naotech-icon-point::before {
+  content: '\e933';
+}
+[class*='nwt-'] .naotech-icon-qr-code-charge::before,
+[class*='nws-'] .naotech-icon-qr-code-charge::before {
+  content: '\e934';
+}
+[class*='nwt-'] .naotech-icon-qr-code::before,
+[class*='nws-'] .naotech-icon-qr-code::before {
+  content: '\e935';
+}
+[class*='nwt-'] .naotech-icon-recurring-payments::before,
+[class*='nws-'] .naotech-icon-recurring-payments::before {
+  content: '\e936';
+}
+[class*='nwt-'] .naotech-icon-to-agree::before,
+[class*='nws-'] .naotech-icon-to-agree::before {
+  content: '\e937';
+}
+[class*='nwt-'] .naotech-icon-wallet::before,
+[class*='nws-'] .naotech-icon-wallet::before {
+  content: '\e938';
+}
+[class*='nwt-'] .naotech-icon-withdrawal::before,
+[class*='nws-'] .naotech-icon-withdrawal::before {
+  content: '\e939';
+}
+[class*='nwt-'] .naotech-icon-calendar::before,
+[class*='nws-'] .naotech-icon-calendar::before {
+  content: '\e93a';
+}
+[class*='nwt-'] .naotech-icon-camera::before,
+[class*='nws-'] .naotech-icon-camera::before {
+  content: '\e93b';
+}
+[class*='nwt-'] .naotech-icon-donation::before,
+[class*='nws-'] .naotech-icon-donation::before {
+  content: '\e93c';
+}
+[class*='nwt-'] .naotech-icon-file::before,
+[class*='nws-'] .naotech-icon-file::before {
+  content: '\e93d';
+}
+[class*='nwt-'] .naotech-icon-leaf::before,
+[class*='nws-'] .naotech-icon-leaf::before {
+  content: '\e93e';
+}
+[class*='nwt-'] .naotech-icon-megaphone::before,
+[class*='nws-'] .naotech-icon-megaphone::before {
+  content: '\e93f';
+}
+[class*='nwt-'] .naotech-icon-movies-and-series::before,
+[class*='nws-'] .naotech-icon-movies-and-series::before {
+  content: '\e940';
+}
+[class*='nwt-'] .naotech-icon-padlock-close::before,
+[class*='nws-'] .naotech-icon-padlock-close::before {
+  content: '\e941';
+}
+[class*='nwt-'] .naotech-icon-padlock-open::before,
+[class*='nws-'] .naotech-icon-padlock-open::before {
+  content: '\e942';
+}
+[class*='nwt-'] .naotech-icon-present::before,
+[class*='nws-'] .naotech-icon-present::before {
+  content: '\e943';
+}
+[class*='nwt-'] .naotech-icon-protected-purchase::before,
+[class*='nws-'] .naotech-icon-protected-purchase::before {
+  content: '\e944';
+}
+[class*='nwt-'] .naotech-icon-thunder::before,
+[class*='nws-'] .naotech-icon-thunder::before {
+  content: '\e945';
+}
+[class*='nwt-'] .naotech-icon-warranty::before,
+[class*='nws-'] .naotech-icon-warranty::before {
+  content: '\e946';
+}
+[class*='nwt-'] .naotech-icon-cart-add::before,
+[class*='nws-'] .naotech-icon-cart-add::before {
+  content: '\e947';
+}
+[class*='nwt-'] .naotech-icon-cart-empty::before,
+[class*='nws-'] .naotech-icon-cart-empty::before {
+  content: '\e948';
+}
+[class*='nwt-'] .naotech-icon-categories::before,
+[class*='nws-'] .naotech-icon-categories::before {
+  content: '\e949';
+}
+[class*='nwt-'] .naotech-icon-deals::before,
+[class*='nws-'] .naotech-icon-deals::before {
+  content: '\e94a';
+}
+[class*='nwt-'] .naotech-icon-history::before,
+[class*='nws-'] .naotech-icon-history::before {
+  content: '\e94b';
+}
+[class*='nwt-'] .naotech-icon-home::before,
+[class*='nws-'] .naotech-icon-home::before {
+  content: '\e94c';
+}
+[class*='nwt-'] .naotech-icon-link::before,
+[class*='nws-'] .naotech-icon-link::before {
+  content: '\e94d';
+}
+[class*='nwt-'] .naotech-icon-mercado-credit::before,
+[class*='nws-'] .naotech-icon-mercado-credit::before {
+  content: '\e94e';
+}
+[class*='nwt-'] .naotech-icon-mercado-puntos::before,
+[class*='nws-'] .naotech-icon-mercado-puntos::before {
+  content: '\e94f';
+}
+[class*='nwt-'] .naotech-icon-notification::before,
+[class*='nws-'] .naotech-icon-notification::before {
+  content: '\e950';
+}
+[class*='nwt-'] .naotech-icon-official-stores::before,
+[class*='nws-'] .naotech-icon-official-stores::before {
+  content: '\e951';
+}
+[class*='nwt-'] .naotech-icon-purchases::before,
+[class*='nws-'] .naotech-icon-purchases::before {
+  content: '\e952';
+}
+[class*='nwt-'] .naotech-icon-real-estate::before,
+[class*='nws-'] .naotech-icon-real-estate::before {
+  content: '\e953';
+}
+[class*='nwt-'] .naotech-icon-sales::before,
+[class*='nws-'] .naotech-icon-sales::before {
+  content: '\e954';
+}
+[class*='nwt-'] .naotech-icon-settings::before,
+[class*='nws-'] .naotech-icon-settings::before {
+  content: '\e955';
+}
+[class*='nwt-'] .naotech-icon-supermarket::before,
+[class*='nws-'] .naotech-icon-supermarket::before {
+  content: '\e956';
+}
+[class*='nwt-'] .naotech-icon-vehicles::before,
+[class*='nws-'] .naotech-icon-vehicles::before {
+  content: '\e957';
+}
+[class*='nwt-'] .naotech-icon-caution::before,
+[class*='nws-'] .naotech-icon-caution::before {
+  content: '\e958';
+}
+[class*='nwt-'] .naotech-icon-info1::before,
+[class*='nws-'] .naotech-icon-info1::before {
+  content: '\e959';
+}
+[class*='nwt-'] .naotech-icon-positive::before,
+[class*='nws-'] .naotech-icon-positive::before {
+  content: '\e95a';
+}
+[class*='nwt-'] .naotech-icon-negative::before,
+[class*='nws-'] .naotech-icon-negative::before {
+  content: '\e95b';
+}
+[class*='nwt-'] .naotech-icon-add::before,
+[class*='nws-'] .naotech-icon-add::before {
+  content: '\e95c';
+}
+[class*='nwt-'] .naotech-icon-attach::before,
+[class*='nws-'] .naotech-icon-attach::before {
+  content: '\e95d';
+}
+[class*='nwt-'] .naotech-icon-bookmark-filled::before,
+[class*='nws-'] .naotech-icon-bookmark-filled::before {
+  content: '\e95e';
+}
+[class*='nwt-'] .naotech-icon-bookmark::before,
+[class*='nws-'] .naotech-icon-bookmark::before {
+  content: '\e95f';
+}
+[class*='nwt-'] .naotech-icon-copy::before,
+[class*='nws-'] .naotech-icon-copy::before {
+  content: '\e960';
+}
+[class*='nwt-'] .naotech-icon-delete::before,
+[class*='nws-'] .naotech-icon-delete::before {
+  content: '\e961';
+}
+[class*='nwt-'] .naotech-icon-download::before,
+[class*='nws-'] .naotech-icon-download::before {
+  content: '\e962';
+}
+[class*='nwt-'] .naotech-icon-edit::before,
+[class*='nws-'] .naotech-icon-edit::before {
+  content: '\e963';
+}
+[class*='nwt-'] .naotech-icon-favorite-filled::before,
+[class*='nws-'] .naotech-icon-favorite-filled::before {
+  content: '\e964';
+}
+[class*='nwt-'] .naotech-icon-favorite::before,
+[class*='nws-'] .naotech-icon-favorite::before {
+  content: '\e965';
+}
+[class*='nwt-'] .naotech-icon-filter::before,
+[class*='nws-'] .naotech-icon-filter::before {
+  content: '\e966';
+}
+[class*='nwt-'] .naotech-icon-logout::before,
+[class*='nws-'] .naotech-icon-logout::before {
+  content: '\e967';
+}
+[class*='nwt-'] .naotech-icon-microphone::before,
+[class*='nws-'] .naotech-icon-microphone::before {
+  content: '\e968';
+}
+[class*='nwt-'] .naotech-icon-pause-filled::before,
+[class*='nws-'] .naotech-icon-pause-filled::before {
+  content: '\e969';
+}
+[class*='nwt-'] .naotech-icon-play-filled::before,
+[class*='nws-'] .naotech-icon-play-filled::before {
+  content: '\e96a';
+}
+[class*='nwt-'] .naotech-icon-play::before,
+[class*='nws-'] .naotech-icon-play::before {
+  content: '\e96b';
+}
+[class*='nwt-'] .naotech-icon-price-highest::before,
+[class*='nws-'] .naotech-icon-price-highest::before {
+  content: '\e96c';
+}
+[class*='nwt-'] .naotech-icon-price-lowest::before,
+[class*='nws-'] .naotech-icon-price-lowest::before {
+  content: '\e96d';
+}
+[class*='nwt-'] .naotech-icon-search::before,
+[class*='nws-'] .naotech-icon-search::before {
+  content: '\e96e';
+}
+[class*='nwt-'] .naotech-icon-share::before,
+[class*='nws-'] .naotech-icon-share::before {
+  content: '\e96f';
+}
+[class*='nwt-'] .naotech-icon-sort::before,
+[class*='nws-'] .naotech-icon-sort::before {
+  content: '\e970';
+}
+[class*='nwt-'] .naotech-icon-sound-off::before,
+[class*='nws-'] .naotech-icon-sound-off::before {
+  content: '\e971';
+}
+[class*='nwt-'] .naotech-icon-sound-on::before,
+[class*='nws-'] .naotech-icon-sound-on::before {
+  content: '\e972';
+}
+[class*='nwt-'] .naotech-icon-star-filled::before,
+[class*='nws-'] .naotech-icon-star-filled::before {
+  content: '\e973';
+}
+[class*='nwt-'] .naotech-icon-star-half-filled::before,
+[class*='nws-'] .naotech-icon-star-half-filled::before {
+  content: '\e974';
+}
+[class*='nwt-'] .naotech-icon-star::before,
+[class*='nws-'] .naotech-icon-star::before {
+  content: '\e975';
+}
+[class*='nwt-'] .naotech-icon-thumb-down-filled::before,
+[class*='nws-'] .naotech-icon-thumb-down-filled::before {
+  content: '\e976';
+}
+[class*='nwt-'] .naotech-icon-thumb-down::before,
+[class*='nws-'] .naotech-icon-thumb-down::before {
+  content: '\e977';
+}
+[class*='nwt-'] .naotech-icon-thumb-up-filled::before,
+[class*='nws-'] .naotech-icon-thumb-up-filled::before {
+  content: '\e978';
+}
+[class*='nwt-'] .naotech-icon-thumb-up::before,
+[class*='nws-'] .naotech-icon-thumb-up::before {
+  content: '\e979';
+}
+[class*='nwt-'] .naotech-icon-upload::before,
+[class*='nws-'] .naotech-icon-upload::before {
+  content: '\e97a';
+}
+[class*='nwt-'] .naotech-icon-view-columns::before,
+[class*='nws-'] .naotech-icon-view-columns::before {
+  content: '\e97b';
+}
+[class*='nwt-'] .naotech-icon-view-galery::before,
+[class*='nws-'] .naotech-icon-view-galery::before {
+  content: '\e97c';
+}
+[class*='nwt-'] .naotech-icon-view-grid::before,
+[class*='nws-'] .naotech-icon-view-grid::before {
+  content: '\e97d';
+}
+[class*='nwt-'] .naotech-icon-view-list::before,
+[class*='nws-'] .naotech-icon-view-list::before {
+  content: '\e97e';
+}
+[class*='nwt-'] .naotech-icon-view-mosaic::before,
+[class*='nws-'] .naotech-icon-view-mosaic::before {
+  content: '\e97f';
+}
+[class*='nwt-'] .naotech-icon-view-relevant::before,
+[class*='nws-'] .naotech-icon-view-relevant::before {
+  content: '\e980';
+}
+[class*='nwt-'] .naotech-icon-visibility-off::before,
+[class*='nws-'] .naotech-icon-visibility-off::before {
+  content: '\e981';
+}
+[class*='nwt-'] .naotech-icon-visibility-on::before,
+[class*='nws-'] .naotech-icon-visibility-on::before {
+  content: '\e982';
+}
+[class*='nwt-'] .naotech-icon-zoom-in::before,
+[class*='nws-'] .naotech-icon-zoom-in::before {
+  content: '\e983';
+}
+[class*='nwt-'] .naotech-icon-zoom-out::before,
+[class*='nws-'] .naotech-icon-zoom-out::before {
+  content: '\e984';
+}
+[class*='nwt-'] .naotech-icon-answer::before,
+[class*='nws-'] .naotech-icon-answer::before {
+  content: '\e985';
+}
+[class*='nwt-'] .naotech-icon-attention::before,
+[class*='nws-'] .naotech-icon-attention::before {
+  content: '\e986';
+}
+[class*='nwt-'] .naotech-icon-laptop::before,
+[class*='nws-'] .naotech-icon-laptop::before {
+  content: '\e987';
+}
+[class*='nwt-'] .naotech-icon-mail::before,
+[class*='nws-'] .naotech-icon-mail::before {
+  content: '\e988';
+}
+[class*='nwt-'] .naotech-icon-phone-add::before,
+[class*='nws-'] .naotech-icon-phone-add::before {
+  content: '\e989';
+}
+[class*='nwt-'] .naotech-icon-phone::before,
+[class*='nws-'] .naotech-icon-phone::before {
+  content: '\e98a';
+}
+[class*='nwt-'] .naotech-icon-question::before,
+[class*='nws-'] .naotech-icon-question::before {
+  content: '\e98b';
+}
+[class*='nwt-'] .naotech-icon-smartphone::before,
+[class*='nws-'] .naotech-icon-smartphone::before {
+  content: '\e98c';
+}
+[class*='nwt-'] .naotech-icon-tablet::before,
+[class*='nws-'] .naotech-icon-tablet::before {
+  content: '\e98d';
+}
+[class*='nwt-'] .naotech-icon-alert-triangle::before,
+[class*='nws-'] .naotech-icon-alert-triangle::before {
+  content: '\e958';
+}

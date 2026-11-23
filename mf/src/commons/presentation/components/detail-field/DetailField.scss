@@ -1,0 +1,20 @@
+.nws-detail-field {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--naotech-sizing-4);
+  min-width: 0rem;
+
+  &__label {
+    color: var(--naotech-app-color-700);
+  }
+
+  &__value {
+    display: flex;
+    align-items: center;
+    column-gap: var(--naotech-sizing-8);
+    min-height: var(--naotech-sizing-24);
+    color: var(--naotech-app-color-900);
+    // Los correos largos no deben empujar la columna vecina de la grilla.
+    overflow-wrap: anywhere;
+  }
+}

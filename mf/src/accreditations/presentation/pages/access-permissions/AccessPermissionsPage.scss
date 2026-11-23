@@ -1,0 +1,67 @@
+@use '../../../../commons/presentation/styles/modal';
+
+.nws-access-permissions {
+  display: flex;
+  // El .nwt-app__body del NwtApplication anidado es display:flex; sin ancho
+  // explícito la sección se encoge al contenido en lugar de llenar el área.
+  width: 100%;
+  flex-direction: column;
+  gap: var(--naotech-sizing-24);
+  padding: var(--naotech-sizing-28) var(--naotech-sizing-32);
+  box-sizing: border-box;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+    margin-bottom: var(--naotech-sizing-16);
+  }
+}
+
+.nws-access-permission-modal {
+  @include modal.ancho-fijo(37.5rem);
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-24);
+  }
+
+  &__switch {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--naotech-sizing-12);
+  }
+
+  &__switch-text {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-2);
+
+    small {
+      color: var(--naotech-app-color-600);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--naotech-sizing-12);
+    padding-top: var(--naotech-sizing-16);
+    border-top: var(--naotech-app-border-1-200);
+  }
+}

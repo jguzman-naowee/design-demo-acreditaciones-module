@@ -1,0 +1,85 @@
+// Los iconos del módulo, con familia propia y acotados a nuestro marcado. Van FUERA de la capa
+// a propósito: sus reglas tienen que ganarle a las del anfitrión, que declara la familia con
+// `!important` sobre `[class^='naotech-icon-']`. Ganar acá no le cambia nada a él, porque la
+// familia es otra y el ámbito es nuestro. Ver scripts/generar-iconos-del-modulo.mjs e
+// icon-font.ts.
+//
+// Arriba porque sass exige los `@use` antes de cualquier regla; que salga primero en el CSS no
+// importa: sin capa siempre gana.
+@use 'module-icons.generated';
+
+// Las tablas del módulo: que sus títulos se lean al estrechar. También fuera de la capa, por lo
+// mismo —tiene que ganarle al CSS del propio SDK, que es el que las encoge sin suelo—.
+@use '../../commons/presentation/styles/datatable';
+
+// La cabecera de las pantallas: que la bajada se lea como bajada y no compita con el
+// título. Fuera de la capa por lo mismo que las tablas.
+@use '../../commons/presentation/styles/page-header';
+
+// El buscador: que quepa su propio placeholder. Cinco de los ocho del módulo se cortaban con
+// el ancho por defecto del SDK. Fuera de la capa por lo mismo que los demás.
+@use '../../commons/presentation/styles/searchbox';
+
+// Los tokens tipográficos que el anfitrión usa y no define, acotados a nuestro marcado. Sin
+// esto la suite aplasta toda nuestra tipografía a 16px. El porqué completo está en el
+// fichero; también va fuera de la capa.
+@use '../../commons/presentation/styles/host-typography';
+
+// Los estilos del sistema de diseño, VIAJANDO CON EL MÓDULO.
+//
+// Hasta ahora vivían en `src/index.scss`, que es la entrada suelta del MF: sirve cuando el
+// módulo se abre por su cuenta, pero NO entra en el bundle expuesto. Resultado: un anfitrión
+// que lo montara veía el módulo sin estilar, y tenía que instalar
+// `@naowee-tech/sdk-frontend-foundations` y añadir sus `@import` por su cuenta.
+//
+// Eso reventó de dos formas: la suite (suite-web-v2) no tiene por qué depender del sistema de
+// diseño de los remotes —tiene el suyo—, y su CI murió con un 403 al bajar ese paquete, que no
+// le está concedido.
+//
+// Así que se importa desde el módulo expuesto y queda dentro del bundle. Cuesta ~150 KB de CSS
+// en el chunk, y es lo que hace que el módulo se pueda montar en CUALQUIER anfitrión sin
+// pedirle nada.
+// EN UNA CAPA, y esto no es cosmético: es lo que evita que el módulo le cambie la tipografía a
+// la suite entera.
+//
+// `styles` trae reglas globales, no solo clases `nwt-*`:
+//
+//     :root{ --naotech-font-family-base:"Inter"; --naotech-font-family:var(--naotech-font-family-base),… }
+//     body,button,input,select,textarea{ font-family:var(--naotech-font-family) }
+//
+// Y la suite define EL MISMO token en su styles.scss, apuntando a `-naowee-tech-inter`, que es
+// el nombre con el que registra sus propios woff2. Este CSS se inyecta al montar el módulo, o
+// sea DESPUÉS, así que ganaba: todo el documento pasaba a pedir `"Inter"`, una familia que nadie
+// registró, y caía al tipo del sistema. QA lo reportó como «fuentes distintas dentro de la misma
+// interfaz», viéndolo en los chips de permisos.
+//
+// Dentro de una capa, cualquier regla SIN capa —las del anfitrión— gana por definición, sin que
+// tengamos que adivinar qué token pisa a cuál ni pelear por orden de carga. Nuestro propio CSS
+// de pantallas tampoco va en capa, así que sigue ganándole a foundations donde lo necesita.
+//
+// Va con `@import` porque `@use` no se puede anidar. Es la regla deprecada de sass, y aquí es la
+// única que sirve.
+@layer nws-accreditations-foundations {
+  @import '@naowee-tech/sdk-frontend-foundations';
+  @import '@naowee-tech/sdk-frontend-foundations/components';
+}
+
+// FALTA `/icons` DEL SDK A PROPÓSITO: el módulo trae su propia tabla, con familia propia y
+// acotada a nuestro marcado (arriba, `module-icons.generated`), y su @font-face lo instala
+// icon-font.ts con el nombre `-naotech-icons-nws`.
+//
+// En la suite hay DOS sistemas de iconos distintos con el MISMO nombre: el de Angular
+// (`@naowee-tech/foundations` + `styles-foundations`, 89 clases, su propio archivo de fuente) y
+// este del SDK de React (142 clases). Comparten la familia `-naotech-icons` y el prefijo de
+// clase `naotech-icon-*`, con codepoints DISTINTOS: de los 26 nombres que existen en los dos,
+// 25 apuntan a glifos diferentes —`calendar` E900 vs E93A, `close` E904 vs E909, `search` E91A
+// vs E96E…—.
+//
+// Como este CSS se inyecta global, al montarse el módulo le pisaba los iconos al anfitrión
+// entero. Medido en dev: su campana de notificaciones (`naotech-icon-bell`, E94F) salía como un
+// trofeo, porque en la fuente del SDK ese codepoint es `mercado-puntos`.
+//
+// No se arregla con orden de cascada: el nombre de la familia y el de las clases son los mismos,
+// y los diálogos del SDK salen por portal a document.body, así que acotarlo por subárbol tampoco
+// alcanza. De ahí la tabla generada: misma tabla del sistema de diseño, familia y ámbito propios.
+// Cuando el SDK permita prefijar la familia y las clases, esto se borra y se vuelve a `/icons`.

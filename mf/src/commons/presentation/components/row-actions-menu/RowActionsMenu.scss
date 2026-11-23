@@ -1,0 +1,72 @@
+// El panel del NwtPopover se portaliza a <body> y no acepta className propio
+// (solo la raíz la recibe), así que se engancha por su contenido con :has().
+// El inline style de useFloating lo centra sobre el trigger, y el kebab está
+// pegado al borde derecho de la fila: sin corregirlo el menú se sale de la
+// tarjeta y del viewport.
+// Solo para el kebab: con un trigger propio (el botón "Acciones") el panel es
+// más angosto que su trigger y el centrado de useFloating ya queda bien.
+.nwt-popover__panel:has(.nws-row-actions-menu--kebab) {
+  // -100% deja el borde derecho del panel sobre el centro del kebab; los 16px
+  // (media dimensión del NwtIconButton medium) lo alinean con su borde.
+  transform: translateX(calc(-100% + var(--naotech-sizing-16))) !important;
+}
+
+// El SDK pinta la superficie del popover con `--naotech-app-color-100` —el gris de la app—,
+// mientras que la lista de un select, que es el mismo tipo de panel flotante, la pinta con
+// `--naotech-app-background`, blanco en el tema claro. Medido en la misma pantalla:
+// rgb(245, 246, 250) el menú de fila contra rgb(255, 255, 255) la lista del filtro. Sobre la
+// tarjeta blanca, el gris se lee como un menú apagado.
+//
+// Se iguala al del select, y con SU token y no con un blanco a mano: en oscuro ese token es
+// gris 900, así que un `#fff` dejaría el menú en blanco sobre una app negra.
+//
+// Acotado al menú de fila con `:has()` en vez de global: si algún día otro popover del módulo
+// quiere el gris del SDK, lo sigue teniendo.
+.nwt-popover__surface:has(.nws-row-actions-menu) {
+  background: var(--naotech-app-background);
+}
+
+// El kebab se quedaba con el tinte naranja puesto mientras el menú estaba abierto, y también
+// después de cerrarlo: el SDK pinta el fondo activo en `:focus` —no en `:focus-visible`—, y un
+// clic de ratón deja el foco en el botón. Medido: rgb(255, 218, 163) con `:focus-visible` en
+// false, o sea foco que el navegador NO considera de teclado.
+//
+// Se apaga solo en ese caso. Con el teclado el tinte SE QUEDA, que es lo correcto: al cerrar el
+// menú con Escape el foco vuelve al botón y hay que poder verlo. Y `:not(:active)` conserva el
+// acuse del clic mientras se mantiene pulsado.
+.nws-row-actions-menu__trigger
+  .nwt-icon-button__content:focus:not(:focus-visible):not(:active) {
+  --pvt-button-background: transparent;
+}
+
+.nws-row-actions-menu {
+  min-width: 11.25rem;
+  padding: var(--naotech-sizing-8);
+
+  &__item {
+    width: 100%;
+    margin: 0rem;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    color: var(--naotech-app-color-900);
+
+    // La barra de acento de 2px de .nwt-dropdown__option marca la selección de
+    // un select; en un menú de acciones solo desalinea los iconos.
+    &::before {
+      display: none;
+    }
+
+    .nwt-icon {
+      --naotech-icon-dimension: var(--naotech-sizing-16);
+    }
+
+    &:disabled {
+      color: var(--naotech-app-color-500);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+}

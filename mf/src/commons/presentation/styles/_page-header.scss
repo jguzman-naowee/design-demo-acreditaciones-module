@@ -1,0 +1,24 @@
+// La cabecera de las pantallas del módulo: título y bajada.
+//
+// Todas usan la misma forma —`…__description` con un `span` de título y un `small` de
+// bajada— y hasta ahora cada una decidía por su cuenta el color de la bajada. Resultado:
+// dos pantallas la tenían gris y CINCO la dejaban en negro, o sea del mismo color que el
+// título, así que los dos textos competían y la cabecera se leía plana. Comparado con el
+// diseño, es lo que más se notaba.
+//
+// La regla va acá y no repetida en cada `.scss` por eso mismo: repetida es como se
+// desincronizó. Se engancha por el sufijo del bloque BEM, que es lo único que comparten
+// —cada pantalla tiene su propio prefijo— y que el marcado garantiza: el contenedor lleva
+// esa única clase.
+//
+// El token está comprobado: `--naotech-app-color-700` resuelve a #646587 en las pantallas
+// del módulo. Importa comprobarlo, porque una variable que no resuelve invalida la
+// declaración entera y el texto se queda negro sin que nadie lo note.
+//
+// Hay una comprobación transversal en el arnés (bloque `banda`) que recorre las cinco
+// pantallas y exige que la bajada NO sea del color del título.
+[class$='__description'] {
+  > small {
+    color: var(--naotech-app-color-700);
+  }
+}

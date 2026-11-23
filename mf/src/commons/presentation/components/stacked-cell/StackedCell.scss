@@ -1,0 +1,19 @@
+.nws-stacked-cell {
+  display: flex;
+  // Las dos líneas juntas, como el rediseño: con el interlineado normal la fila crece de más.
+  line-height: 1.3;
+  flex-direction: column;
+  row-gap: var(--naotech-sizing-2);
+  // La celda de la tabla ya recorta; acá solo hay que dejarla encogerse.
+  min-width: 0rem;
+
+  &__primary,
+  &__secondary {
+    display: block;
+    overflow-wrap: break-word;
+  }
+
+  &__secondary {
+    color: var(--naotech-app-color-700);
+  }
+}

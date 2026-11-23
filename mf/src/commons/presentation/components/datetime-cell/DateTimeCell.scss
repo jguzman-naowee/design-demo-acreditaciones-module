@@ -1,0 +1,18 @@
+.nws-datetime-cell {
+  display: flex;
+  // Las dos líneas juntas, como el rediseño: con el interlineado normal la fila crece de más.
+  line-height: 1.3;
+  flex-direction: column;
+  row-gap: var(--naotech-sizing-2);
+  min-width: 0rem;
+
+  &__date {
+    // La fecha no se parte por el espacio del día: «Ago 18,» arriba y «2026» abajo se lee mal.
+    white-space: nowrap;
+  }
+
+  &__time {
+    color: var(--naotech-app-color-700);
+    white-space: nowrap;
+  }
+}

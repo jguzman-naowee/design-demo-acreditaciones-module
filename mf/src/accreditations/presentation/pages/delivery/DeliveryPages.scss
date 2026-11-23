@@ -1,0 +1,1139 @@
+@use '../../../../commons/presentation/styles/modal';
+
+// El historial del detalle: una línea por movimiento, con su fecha y su nota.
+.nws-event-accredited-detail__history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--naotech-sizing-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-2);
+    padding-left: var(--naotech-sizing-12);
+    border-left: 2px solid var(--naotech-color-gray-300, #e6e6e6);
+  }
+
+  small {
+    color: var(--naotech-text-color-secondary, #6b6b6b);
+  }
+}
+
+// El modal de emisión: buscar por documento, ver a la persona y elegir su tipo.
+.nws-accredit-person-modal {
+  @include modal.ancho-fijo(46rem);
+
+  // Medido antes de esto: 594px recién abierto, 558 tras buscar y 804 al elegir a alguien,
+  // porque aparecen la tarjeta de la persona, su aviso y los campos del tipo. Con el cuerpo de
+  // alto fijo, el modal se queda quieto y lo que sobra scrollea dentro.
+  // El alto sale de sumar el peor caso del tab «Listos para acreditar», que es una página
+  // PARCIAL de varias —ahí salen el aviso del conteo y la paginación a la vez—: pestañas 48 +
+  // buscador 48 + lista 292 + aviso 16 + paginación 32, más los cuatro huecos de 20 = 516px.
+  // Antes eran 480 con una lista de 256, calibrado igual pero para páginas de diez filas: la
+  // lista scrolleaba por dentro con 702px de contenido y QA se quejó. Ver READY_LIMIT.
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-20);
+
+    @include modal.cuerpo-fijo(32.25rem);
+  }
+
+  // El campo y su botón en una fila, como el rediseño. El botón se alinea con el pie del
+  // campo, no con su etiqueta.
+  &__search {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--naotech-sizing-12);
+
+    // El campo se lleva el ancho y el botón se queda con lo suyo.
+    > *:first-child {
+      flex: 1 1 auto;
+      min-width: 0rem;
+    }
+
+    > button {
+      flex: none;
+    }
+  }
+
+  // La ayuda va pegada al campo, no separada por el hueco del cuerpo.
+  &__hint {
+    margin-top: calc(var(--naotech-sizing-16) * -1);
+    color: var(--naotech-app-color-700);
+  }
+
+  // Antes de buscar: qué hacer, en vez de un cuerpo vacío con un botón deshabilitado debajo.
+  &__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: var(--naotech-sizing-8);
+    padding: var(--naotech-sizing-32) var(--naotech-sizing-16);
+    color: var(--naotech-app-color-700);
+
+    .nwt-icon {
+      --naotech-icon-dimension: var(--naotech-sizing-32);
+    }
+  }
+
+  &__person {
+    padding: var(--naotech-sizing-16);
+    border-radius: var(--naotech-sizing-12);
+    background-color: var(--naotech-color-gray-100, #f7f7f7);
+  }
+
+  // La lista de candidatos: filas seleccionables, con su documento y su delegación.
+  //
+  // El alto es FIJO, no un tope: con `max-height` el modal crecía al aparecer los resultados de
+  // la búsqueda y volvía a moverse con cada búsqueda nueva. En este modal buscar es el punto, así
+  // que el espacio se reserva desde el principio y la lista scrollea dentro.
+  &__candidates {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // Alto fijo Y sin encogerse: dentro del cuerpo de alto fijo, un hijo flex cede su altura
+    // cuando falta espacio, y esta lista se aplastaba a 30px al elegir a alguien —quedaba sin
+    // poder marcar a nadie más—. El que cede es el cuerpo, scrolleando.
+    //
+    // Los 292px son EXACTAMENTE lo que mide una página completa: cuatro filas de 63px con sus
+    // separaciones de 8, más el «Seleccionar toda la página», que va dentro de esta misma
+    // lista. Así la lista no scrollea por dentro, que es de lo que se quejó QA. El tamaño de
+    // página que lo sostiene es READY_LIMIT: si sube, esto vuelve a scrollear.
+    @include modal.zona-fija-alto(18.25rem);
+  }
+
+  // La fila de «toda la página»: casilla y conteo, sin marco de botón.
+  &__pick-all {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-8);
+    padding: 0 var(--naotech-sizing-4);
+
+    small {
+      color: var(--naotech-text-color-secondary, #6b6b6b);
+    }
+  }
+
+  &__candidate {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-2);
+    width: 100%;
+    padding: var(--naotech-sizing-12);
+    border: 1px solid var(--naotech-color-gray-300, #e6e6e6);
+    border-radius: var(--naotech-sizing-8);
+    background: var(--naotech-app-background);
+    text-align: left;
+    cursor: pointer;
+
+    &--picked {
+      border-color: var(--naotech-primary-color-normal);
+      box-shadow: 0 0 0 1px var(--naotech-primary-color-normal);
+    }
+
+    small {
+      color: var(--naotech-text-color-secondary, #6b6b6b);
+    }
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.nws-delivery {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-24);
+    padding: var(--naotech-sizing-28) var(--naotech-sizing-32);
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    // SIN `flex-wrap`, y no por gusto: al envolverse, el portal de la lista del NwtDropdown
+    // se posiciona mal y cae ENCIMA del botón de al lado. Medido: con la lista abierta, la
+    // caja de «Generar Acreditaciones» quedaba tapada y `elementFromPoint` en su centro
+    // devolvía una opción del desplegable, o sea que no se podía pulsar.
+    //
+    // Por eso las acciones de la selección no viven acá sino en su propia barra sobre la
+    // tabla: esta fila tiene que quedarse en un renglón.
+    gap: var(--naotech-sizing-12);
+
+    // Ningún rótulo de la barra se parte en dos líneas. Al entrar «Descargar reporte» el flex
+    // repartió lo que quedaba y «Nuevo acreditado» salió en dos renglones; si algún día no cabe
+    // todo, es mejor que la barra se estreche por el nombre del evento —que ya se recorta con
+    // puntos suspensivos— y no que los botones se partan.
+    .nwt-button {
+      white-space: nowrap;
+    }
+  }
+
+  // Las dos filas envuelven en vez de comprimir: el buscador ya no cede (ver
+  // commons/presentation/styles/_searchbox.scss), así que sin esto la fila se desbordaría al
+  // estrechar. Con tres desplegables al lado, en un portátil no siempre caben en una línea.
+  &__filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+    margin-bottom: var(--naotech-sizing-16);
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--naotech-sizing-12);
+  }
+
+  // Ningún nwtTheme del SDK da ámbar: caution resuelve al mismo rojo del
+  // primario y warning trae texto blanco sobre amarillo (ilegible). Se pinta
+  // sobreescribiendo las variables primarias solo para este botón, que es el
+  // mismo en la lista de acreditados y en su detalle.
+  &__actions-button {
+    --naotech-primary-color-normal: var(--naotech-color-orange-400);
+    --naotech-primary-color-hover: var(--naotech-color-orange-500);
+    --naotech-primary-color-active: var(--naotech-color-orange-600);
+    --naotech-primary-color-text-normal: var(--naotech-app-background);
+
+    // El contenido se estira para que el divisor tome el alto del botón.
+    .nwt-button__content {
+      align-items: stretch;
+    }
+
+    .nwt-icon {
+      --naotech-icon-dimension: var(--naotech-sizing-20);
+
+      align-self: center;
+    }
+  }
+
+  // Divisor del botón partido del diseño.
+  &__actions-separator {
+    width: 1px;
+    background: color-mix(
+      in srgb,
+      var(--naotech-app-background) 40%,
+      transparent
+    );
+  }
+}
+
+// El componente del design system (suite-web-components, ns-subheader) es la
+// referencia: pinta la franja BLANCA y, sin título, alinea sus ítems a la
+// derecha (`--without-title { justify-content: flex-end }`). El NwtSubheader de
+// React quedó divergente con fondo gris; su borde inferior redondeado sí es del
+// diseño, así que se queda. La alineación a la derecha ya sale del
+// `space-between` del SDK con el body vacío: no hay que forzarla.
+.nws-delivery-counters {
+  // El SDK declara width: 100% con padding y sin box-sizing, así que se pasaba
+  // 24px del ancho disponible y sacaba scroll horizontal en toda la sección.
+  box-sizing: border-box;
+  background: var(--naotech-app-background);
+
+  // El DS pinta este recuadro de 40px blanco —invisible sobre la franja—; el
+  // SDK lo dejó gris, que sobre blanco se ve como un cuadro.
+  .nwt-detail-item__icon {
+    background: transparent;
+  }
+
+  // El font de iconos no tiene "persona con check": se compone el check del
+  // diseño sobre el icono de persona del segundo contador.
+  .nwt-detail-item:last-child .nwt-detail-item__icon {
+    position: relative;
+
+    &::after {
+      content: '\e95a'; // naotech-icon-positive
+      position: absolute;
+      // El recuadro mide 40 y el glifo 24: el check va sobre su esquina.
+      right: var(--naotech-sizing-6);
+      bottom: var(--naotech-sizing-6);
+      padding: 0rem 1px;
+      border-radius: 50%;
+      background: var(--naotech-app-background);
+      font-family: -naotech-icons;
+      font-size: var(--naotech-sizing-12);
+      line-height: 1;
+      color: var(--naotech-app-color-900);
+    }
+  }
+}
+
+.nws-batch-detail {
+  &__panels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--naotech-sizing-24);
+    align-items: start;
+
+    // El ancho mínimo del módulo NO vale acá, y es la única excepción.
+    //
+    // `_datatable.scss` fuerza 60rem (960px) a toda tabla por encima de 641px, y su motivo
+    // está escrito ahí: por debajo de eso los títulos quedan ilegibles, y 60rem «queda por
+    // debajo del ancho útil de un portátil de 1366px, así que ahí no aparece ninguna barra».
+    //
+    // Ese razonamiento es sobre tablas A ANCHO COMPLETO. Estos paneles parten el ancho en
+    // DOS, así que la tabla recibe la mitad menos los rellenos: para llegar a 960px haría
+    // falta una página de unos 2072px. O sea que desborda SIEMPRE, en cualquier monitor, y
+    // el `overflow: auto` del SDK saca una barra horizontal permanente.
+    //
+    // Lo reportó QA como «un deslizar innecesario», y el adjetivo es exacto: la tabla de
+    // integrantes tiene dos columnas —número y persona— que caben de sobra en la mitad de
+    // pantalla, así que al otro lado de la barra solo hay blanco. Antes molestaba menos
+    // porque la columna de la derecha llevaba un uuid de 36 caracteres y deslizar servía
+    // para leerlo; esa columna se retiró.
+    //
+    // NO se toca la regla global: sigue valiendo para las tablas a ancho completo, que es
+    // para las que se midió. Y no se borre esto creyendo que sobra — sin ello vuelve la
+    // barra.
+    .nwt-datatable__table > table {
+      min-width: 0;
+    }
+  }
+
+  &__list,
+  &__preview {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__list-filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: var(--naotech-sizing-12);
+
+    // El NwtSearchbox es inline-block con ancho auto y la NwtPagination no se
+    // encoge ni envuelve: sin esto se desbordan al compartir fila.
+    .nwt-searchbox {
+      --naotech-searchbox-width: 100%;
+
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  &__sheet-wrapper {
+    overflow: auto;
+    max-height: 30rem;
+    padding: var(--naotech-sizing-16);
+    border-radius: var(--naotech-sizing-12);
+    background: var(--naotech-app-color-200);
+  }
+
+  // La hoja imita el documento que va a generar el backend.
+  &__sheet {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-12);
+    min-height: 26rem;
+    // El padding superior deja libre la esquina del clúster de zoom.
+    padding: var(--naotech-sizing-48) var(--naotech-sizing-20)
+      var(--naotech-sizing-24);
+    border-radius: var(--naotech-sizing-12);
+    background: var(--naotech-app-background);
+    box-shadow: var(--naotech-shadow-card);
+  }
+
+  &__sheet-more {
+    color: var(--naotech-app-color-600);
+    text-align: center;
+  }
+
+  // Clúster flotante sobre la hoja: se copia el shell del NwtIconButtonGroup,
+  // que como componente no sirve (es un segmentado de valor único).
+  &__zoom {
+    position: absolute;
+    top: var(--naotech-sizing-8);
+    right: var(--naotech-sizing-8);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--naotech-sizing-4);
+    padding: var(--naotech-sizing-4);
+    border-radius: var(--naotech-sizing-8);
+    background: var(--naotech-app-color-100);
+    border: var(--naotech-app-border-1-200);
+  }
+
+  &__credentials {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--naotech-sizing-16);
+    transform-origin: top left;
+    transition: transform 0.15s ease-out;
+  }
+
+  &__credential {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: var(--naotech-sizing-8);
+    padding: var(--naotech-sizing-12);
+    border: var(--naotech-app-border-1-200);
+    border-radius: var(--naotech-sizing-12);
+    background: var(--naotech-app-background);
+    text-align: center;
+  }
+
+  &__credential-photo {
+    width: var(--naotech-sizing-64, 4rem);
+    height: var(--naotech-sizing-64, 4rem);
+    border-radius: var(--naotech-sizing-8);
+    background: var(--naotech-app-color-300);
+  }
+
+  &__credential-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-2);
+  }
+
+  &__credential-name {
+    font-size: var(--naotech-sizing-12);
+    font-weight: var(--naotech-font-weight-bold);
+    color: var(--naotech-app-color-900);
+  }
+
+  &__credential-type,
+  &__credential-document {
+    font-size: var(--naotech-sizing-10);
+    color: var(--naotech-app-color-700);
+  }
+
+  &__credential-code {
+    width: var(--naotech-sizing-32);
+    height: var(--naotech-sizing-32);
+    background: var(--naotech-app-color-900);
+  }
+}
+
+.nws-delivery-confirm-modal,
+.nws-new-accredited-modal {
+  &__body {
+    // El icono del aviso, ARRIBA y no a media altura.
+    //
+    // `alert.scss` del SDK deja `align-items: var(--naotech-alert-align-items, initial)`, o
+    // sea `stretch`: con una línea no se nota, pero con la lista de consecuencias el círculo
+    // se estira y queda flotando en el medio, lejos de la primera frase. El patrón
+    // `var(--token, respaldo)` es perilla pública del SDK, así que pisarla es lo previsto.
+    --naotech-alert-align-items: flex-start;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-20);
+  }
+
+  // Las consecuencias, como lista dentro del mismo aviso.
+  //
+  // Sin el reset el `<ul>` se lleva los ~40px de sangría del navegador y las viñetas quedan
+  // despegadas del icono, como si fueran otro bloque. La sangría propia va en `em` para que
+  // siga al tamaño del texto del aviso.
+  &__cautions {
+    display: flex;
+    flex-direction: column;
+    margin: 0rem;
+    padding-left: 1.15em;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  // El mensaje de cierre pesa menos por el COLOR, no encogiendo la letra: el verde del
+  // variant `mute` del SDK es `theme-color-600` y sobre blanco da 3,13:1 —por debajo del
+  // 4,5:1 que pide AA—, así que el único texto que dice DÓNDE ver el resultado sería el
+  // menos legible del diálogo. Con `positive-800` sube por encima del mínimo y se sigue
+  // leyendo como pie.
+  &__outcome .nwt-alert__label {
+    color: var(--naotech-positive-color-800);
+  }
+
+  // El SDK no declara `resize` en su textarea, así que el navegador le deja el tirador de la
+  // esquina y se puede estirar fuera del modal.
+  &__field textarea {
+    resize: none;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: var(--naotech-sizing-12);
+    padding-top: var(--naotech-sizing-16);
+    border-top: var(--naotech-app-border-1-200);
+  }
+}
+
+.nws-delivery-confirm-modal {
+  @include modal.ancho-fijo(28rem);
+
+  .nwt-modal__header {
+    &::before {
+      content: '';
+      flex: 0 0 auto;
+      width: var(--naotech-sizing-24);
+    }
+
+    &__description {
+      flex: 1 1 auto;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  &__question {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+    text-align: center;
+
+    p {
+      margin: 0rem;
+    }
+  }
+
+  // El SDK no declara resize en su textarea, así que el navegador le deja el
+  // tirador de la esquina; el diseño lo quiere de alto fijo.
+  &__field textarea {
+    resize: none;
+  }
+
+  &__footer {
+    justify-content: space-between;
+    border-top: none;
+  }
+}
+
+// Cambiar el tipo de acreditado reutiliza el modal de confirmación, pero es un formulario y
+// no una pregunta: el título va a la izquierda, sin el hueco que lo centra frente a la X.
+.nws-change-role-modal {
+  .nwt-modal__header {
+    &::before {
+      display: none;
+    }
+
+    &__description {
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+
+  &__role {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  &__current {
+    color: var(--naotech-app-color-600);
+  }
+}
+
+// Elegir el tipo de quien tiene más de una función: una fila por persona, con su nombre y
+// documento a la izquierda y el desplegable a la derecha.
+.nws-pick-role-modal {
+  @include modal.ancho-fijo(37.5rem);
+
+  // El anfitrión (suite-web-v2) le da 8px de sangría a TODOS los rótulos de campo
+  // (`--naotech-input-box-label-padding` en su styles.scss): aquí el rótulo del desplegable
+  // tiene que empezar donde empieza el campo y donde empieza el rótulo de las filas sin él.
+  --naotech-input-box-label-padding: 0rem;
+
+  // Campo más bajo para que la fila con desplegable no sea mucho más alta que la que solo
+  // muestra el tipo. PRUEBA: 2px verticales en vez de los 7px del SDK (8px menos el borde).
+  .nwt-input-box {
+    --pvt-control-padding: 2px
+      calc(var(--naotech-sizing-12) - var(--pvt-control-border-size));
+  }
+
+  // Toda la fila a un solo tamaño, el de la cédula (`nwt-smalltext`, 14px): nombre, tipo fijo
+  // y el valor del desplegable. Se ata al token y no al 14px que hoy trae el SDK, para que el
+  // desplegable siga al resto si la escala cambia.
+  .nwt-dropdown__input {
+    font-size: var(--naotech-smalltext-font-size);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-16);
+    max-height: 22rem;
+    margin: 0rem;
+    padding: 0rem;
+    overflow-y: auto;
+    list-style: none;
+  }
+
+  // Centrado: nombre y cédula quedan a media altura del rótulo y el desplegable. Ya no rebota
+  // porque el error solo aparece al confirmar (el control no lleva validador, ver el modal).
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--naotech-sizing-16);
+  }
+
+  &__person {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  &__muted {
+    color: var(--naotech-app-color-600);
+  }
+}
+
+.nws-new-accredited-modal {
+  @include modal.ancho-fijo(37.5rem);
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-12);
+  }
+
+  &__section-title {
+    font-size: var(--naotech-sizing-12);
+    font-weight: var(--naotech-font-weight-bold);
+    letter-spacing: 0.04em;
+    color: var(--naotech-app-color-600);
+  }
+}
+
+// Las dos pantallas de detalle comparten la composición del diseño: la tira de pestañas en
+// la cabecera de la tarjeta, y cada sección con su badge al lado del título y sus acciones a
+// la derecha. Una vive de datos de demo y la otra del gateway, pero se ven igual.
+.nws-accredited-detail,
+.nws-event-accredited-detail {
+  &__card {
+    // El header del NwtCard trae el padding de la tarjeta; la tira de pestañas
+    // va de borde a borde y su propio hairline hace de separador.
+    .nwt-card__header {
+      padding: 0rem var(--naotech-sizing-16);
+    }
+  }
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-20);
+  }
+
+  // Los permisos, en su propia tarjeta debajo de la de pestañas.
+  &__permissions {
+    .nwt-card__header {
+      padding: var(--naotech-sizing-16);
+    }
+  }
+}
+
+.nws-accreditation-movements {
+  // El NwtDropdown no tiene prop ni token de ancho: hereda los ~200px
+  // intrínsecos de su input. El diseño los quiere angostos, del tamaño de su
+  // etiqueta, así que se acota el dropdown y el input se ajusta a él.
+  .nws-delivery__search .nwt-dropdown {
+    width: 9rem;
+
+    input {
+      width: 100%;
+      min-width: 0rem;
+    }
+  }
+
+  // Nueve columnas dejan poco ancho: la fecha con hora y el autor van con la
+  // tipografía pequeña del diseño.
+  .nwt-title {
+    min-width: 0rem;
+    font-size: var(--naotech-caption-font-size);
+    line-height: var(--naotech-caption-line-height);
+  }
+
+  // NwtTitle renderiza divs, así que la regla de elipsis del datatable (que
+  // solo aplica a `> span`) no lo alcanza y el texto se cortaría en seco.
+  .nwt-title__description,
+  .nwt-title__subtitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__validations {
+    color: var(--naotech-app-link-color);
+    font-weight: var(--naotech-font-weight-semibold);
+
+    span {
+      font-weight: var(--naotech-font-weight-regular);
+      color: var(--naotech-app-color-600);
+    }
+  }
+}
+
+.nws-accreditation-history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--naotech-sizing-16);
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-12);
+  }
+
+  // El corte de la lista, centrado bajo ella.
+  &__more {
+    display: flex;
+    justify-content: center;
+  }
+
+  // Cuando lo cargado se topa en la página del contrato y hay más lecturas de las que se ven.
+  &__capped {
+    color: var(--naotech-app-color-700);
+    text-align: center;
+  }
+
+  // Estas dos siguen en pie para las OTRAS dos pantallas que comparten NwsHistoryTable —el
+  // historial de accesos y el de la lista de acreditados—: el detalle del acreditado pasó a
+  // línea de tiempo, pero ellas siguen con tabla.
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  // NwtTitle trae el avatar con esquinas redondeadas; el diseño lo quiere circular, y el
+  // indicador de observación es más chico que el avatar por defecto del NwtAvatarIcon.
+  .nwt-title {
+    --naotech-avatar-radius: 50%;
+  }
+
+  &__note {
+    --naotech-avatar-icon-dimension: var(--naotech-sizing-20);
+  }
+}
+
+// El historial como línea de tiempo.
+//
+// Era una tabla de cuatro columnas, y tres de ellas repetían el mismo valor en todas las
+// filas: el tipo de acreditado no cambia entre movimientos. Lo que de verdad se lee de un
+// historial es la SECUENCIA, y para eso la línea de tiempo gasta menos y se entiende antes.
+.nws-timeline {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &__item {
+    // La rejilla deja la primera columna para la marca y la línea; el resto es el contenido.
+    display: grid;
+    grid-template-columns: var(--naotech-sizing-16) 1fr;
+    column-gap: var(--naotech-sizing-12);
+    padding-bottom: var(--naotech-sizing-20);
+    // El hilo que une los movimientos: es un borde del propio elemento, así que crece con su
+    // contenido y no hay que calcular alturas.
+    border-left: 1px solid var(--naotech-app-color-300, #d6d6d6);
+    // Y se corre para que el borde caiga en el centro de la marca.
+    margin-left: calc(var(--naotech-sizing-8) - 0.5px);
+    padding-left: calc(var(--naotech-sizing-8) + 0.5px);
+
+    // El último no lleva hilo: no hay nada debajo a lo que unirse.
+    &:last-child {
+      padding-bottom: 0rem;
+      border-left-color: transparent;
+    }
+
+    // Todo el contenido va en la segunda columna, apilado.
+    > *:not(.nws-timeline__mark) {
+      grid-column: 2;
+    }
+  }
+
+  &__mark {
+    grid-column: 1;
+    grid-row: 1;
+    // 16 y no 12: medido en la demo, su marca mide 16px. Con 12 se veía canija al lado de un
+    // título de 16px, y el aro de las entradas viejas casi no se distinguía del hilo.
+    width: var(--naotech-sizing-16);
+    height: var(--naotech-sizing-16);
+    // Centrada sobre el hilo, y con anillo del fondo para que el hilo no la cruce. El
+    // desplazamiento es la mitad de su ancho: si cambia el tamaño, cambia acá.
+    margin-left: calc(var(--naotech-sizing-16) / -2 - 0.5px);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--naotech-app-background, #fff);
+    box-sizing: border-box;
+    // El tono llega por variable —lo pone cada `--item--*` de abajo— y no en el
+    // `background-color` directamente: el aro necesita el MISMO color en el borde, y
+    // `currentColor` ahí daba negro (es el color del texto, no el del tono). Medido.
+    background-color: var(--pvt-mark, var(--naotech-app-color-400, #b3b3b3));
+  }
+
+  // Solo el movimiento más reciente va relleno; los anteriores quedan en aro, como en el
+  // rediseño. Es lo que hace que el estado de HOY se lea de un vistazo en una lista larga:
+  // con todas rellenas, la primera no se distingue de la última.
+  &__item:not(:first-child) .nws-timeline__mark {
+    border: 2px solid var(--pvt-mark, var(--naotech-app-color-400, #b3b3b3));
+    background-color: var(--naotech-app-background, #fff);
+  }
+
+  // El color de la marca dice qué clase de movimiento fue, sin gastar un badge por fila.
+  //
+  // Con su número y no con `-normal`: ese sufijo solo existe para `primary`. Con
+  // `--naotech-positive-color-normal` la declaración quedaba inválida y la marca salía
+  // TRANSPARENTE —ni siquiera caía al gris de la regla base—. Medido: dos de tres marcas
+  // invisibles. Y con respaldo en duro, que es lo que el módulo ya hace en otros sitios.
+  &__item--positive .nws-timeline__mark {
+    --pvt-mark: var(--naotech-positive-color-600, #14a919);
+  }
+
+  &__item--negative .nws-timeline__mark {
+    --pvt-mark: var(--naotech-negative-color-700, #d92d20);
+  }
+
+  &__item--caution .nws-timeline__mark {
+    --pvt-mark: var(--naotech-caution-color-600, #f05705);
+  }
+
+  // El informative iba al NARANJA de primary, que es el color de las acciones de la
+  // aplicación: «Generada» salía del mismo tono que el botón de al lado. Medido:
+  // rgb(215, 64, 9) donde la demo pinta azul. El tema sí tiene el azul —500/600/700—, lo que
+  // no existe es su `-normal`, que es lo que me llevó a primary la primera vez.
+  &__item--informative .nws-timeline__mark {
+    --pvt-mark: var(--naotech-informative-color-600, #228bff);
+  }
+
+  // Un paso más claro que el 700 que llevaba: medido en la demo, su meta va en #8788ab, que es
+  // el 600. Con el 700 competía con el título en vez de quedar debajo de él.
+  &__meta {
+    color: var(--naotech-app-color-600);
+  }
+
+  // El título de un grupo de lecturas, que además lo despliega. Es un <button> por el
+  // teclado y el lector de pantalla, pero se tiene que leer como el título de al lado: sin
+  // esto salía con el aspecto de botón del navegador en medio de la línea de tiempo.
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-6);
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--naotech-app-color-900);
+    cursor: pointer;
+
+    .nwt-icon {
+      --naotech-icon-dimension: var(--naotech-sizing-16);
+
+      color: var(--naotech-app-color-700);
+    }
+  }
+
+  // Las lecturas del día, desplegadas.
+  &__readings {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-4);
+    margin: var(--naotech-sizing-6) 0 0;
+    padding-left: var(--naotech-sizing-12);
+    border-left: 2px solid var(--naotech-app-color-300, #d6d6d6);
+    list-style: none;
+    color: var(--naotech-app-color-800);
+  }
+
+  // La observación que escribió quien hizo el movimiento. Con barra a la izquierda, como el
+  // rediseño: sin ella se leía como una tercera línea del movimiento y no como lo que alguien
+  // escribió a mano.
+  &__note {
+    margin: var(--naotech-sizing-6) 0 0;
+    padding-left: var(--naotech-sizing-12);
+    border-left: 2px solid var(--naotech-app-color-300, #d6d6d6);
+    color: var(--naotech-app-color-900);
+    overflow-wrap: break-word;
+  }
+}
+
+// La barra de la selección, sobre la tabla.
+//
+// No va en la cabecera de la página con los demás botones: esa fila ya lleva el selector de
+// evento, el tipo y el de generar, y al envolverse rompe el portal del desplegable. Acá crece
+// sin pelearse con nadie, y queda al lado de lo que se está seleccionando.
+.nws-card-batches__selection {
+  display: flex;
+  align-items: center;
+  gap: var(--naotech-sizing-12);
+  padding: var(--naotech-sizing-8) var(--naotech-sizing-12);
+  border-radius: var(--naotech-sizing-8);
+  background-color: var(--naotech-color-gray-100, #f7f7f7);
+
+  // El contador, y SOLO el contador: como `span` a secas, esta regla también alcanzaba al
+  // `.nwt-button__content` de los dos botones —el SDK deja el rótulo suelto ahí dentro, sin
+  // envolverlo— y les robaba el color de su variante para pintarlos de gris-900 (#282834).
+  // En «Enviar a impresión» eso dejaba letra oscura sobre el rojo primario (#d74009): 3,21:1,
+  // muy por debajo del 4,5:1 que pide AA, que es el «casi no se lee» que reportó producto.
+  // Con el hijo directo el botón recupera el blanco del SDK
+  // (--naotech-primary-color-text-normal) y sube a 4,54:1.
+  > span {
+    margin-right: auto;
+    color: var(--naotech-app-color-900);
+  }
+
+  // «Revisar» se quedaba con el variant `quiet` tal cual, que en esta paleta resuelve a
+  // naranja-100 de fondo (#ffedc7) con texto naranja-700 (#d74009): el ámbar pálido sobre
+  // ámbar, que además da 3,93:1 y tampoco llega a AA. Se pinta con el naranja del resto del
+  // módulo (el mismo de .nws-delivery__actions-button) sobreescribiendo las variables
+  // SECUNDARIAS, que son las que lee `quiet`; ningún nwtVariant ni nwtTheme del SDK da este
+  // naranja —`caution` resuelve al mismo rojo del primario— así que no hay atajo por props.
+  //
+  // La letra va OSCURA y no blanca a propósito: sobre naranja-400 el blanco da 2,07:1, menos
+  // de la mitad del mínimo, y el naranja más oscuro que aguanta blanco es el 700, que ya es
+  // el rojo del botón de al lado. Gris-900 sobre naranja-400 son 7,04:1.
+  //
+  // El activo se queda en el 500 (5,62:1) en vez de seguir al 600 (4,21:1) porque el SDK usa
+  // ese mismo color para :focus, y el foco SÍ se queda puesto después de pulsar.
+  .nws-card-batches__review {
+    --naotech-secondary-color-normal: var(--naotech-color-orange-400);
+    --naotech-secondary-color-hover: var(--naotech-color-orange-500);
+    --naotech-secondary-color-active: var(--naotech-color-orange-500);
+    --naotech-secondary-color-text-normal: var(--naotech-app-color-900);
+  }
+}
+
+.nws-card-batches {
+  // El número manda y el uuid queda debajo en pequeño: es lo que hay que pegarle a
+  // backend cuando un lote sale mal.
+  &__label {
+    display: flex;
+    flex-direction: column;
+
+    small {
+      color: var(--naotech-app-color-600);
+    }
+  }
+}
+
+// El detalle del lote de acreditaciones reusa el layout de dos paneles de .nws-batch-detail
+// —tabla a la izquierda, previsualización a la derecha— y solo añade el visor, que en
+// lugar de tarjetas de mentira muestra el PDF de verdad.
+.nws-card-batch-detail {
+  &__viewer {
+    width: 100%;
+    height: 32rem;
+    border: 0;
+    border-radius: var(--naotech-sizing-12);
+    background: var(--naotech-app-color-200);
+
+    &--empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--naotech-sizing-24);
+      text-align: center;
+      color: var(--naotech-app-color-600);
+    }
+  }
+}
+
+// El estado de la entrega, con color y como TEXTO.
+//
+// No es un NwtBadge a propósito, y está medido: el badge no envuelve ni recorta, así que con la
+// tabla estrecha salía partido —«● 25 de a»—. Acá el color lo lleva la letra, que sí envuelve.
+//
+// Las TRES de esta columna: sin entregar, impresa y entregada. La cuarta que menciona el
+// rediseño —anulada— no es de acá: es el ESTADO, que va en su propia columna.
+//
+// El TODO que había aquí decía que `printed_at` no llegaba y que por eso solo se podían pintar
+// dos. Llegó: medido en staging el 2026-09-15 sobre el evento 26, con valor.
+//
+// Ojo con la familia del token: de los temas, SOLO `primary` tiene sufijo `-normal`.
+// `--naotech-positive-color-normal` no existe —medido dentro del módulo, devuelve vacío— y una
+// variable que no resuelve deja la declaración inválida, así que el color no se aplicaba y el
+// texto salía del color heredado. Los que existen van por número: 500/600/700.
+.nws-delivery-state {
+  font-weight: var(--naotech-font-weight-medium);
+
+  &--entregada {
+    color: var(--naotech-positive-color-700, #1f8923);
+  }
+
+  // Un paso intermedio, y por eso va en el tono de aviso y no en el verde de entregada ni en
+  // el gris de sin entregar: el carnet existe pero todavía no está en manos de nadie.
+  &--impresa {
+    color: var(--naotech-caution-color-700, #8a6100);
+  }
+
+  &--pendiente {
+    color: var(--naotech-app-color-700);
+  }
+}
+
+// Carnet desactualizado: solo el icono, junto al estado de entrega; el mensaje sale en el tooltip.
+.nws-accredited-row__delivery {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+// El avatar del SDK mide 4rem de fábrica y el glifo se escala desde esa variable: se achica a la
+// altura del texto de la fila.
+.nws-accredited-row__outdated {
+  --naotech-avatar-icon-dimension: 1.5rem;
+
+  flex: none;
+}
+
+// El aviso de que el reporte no lleva los desplegables. Va en la fila de acciones, debajo de
+// su enlace, y con el ancho acotado: suelto se estira hasta el botón de «Nuevo acreditado» y
+// empuja la fila entera.
+.nws-delivery__report-note {
+  flex: 0 1 auto;
+  max-width: 18rem;
+  color: var(--naotech-app-color-600);
+  text-align: right;
+}
+
+// El paso entre las dos listas de acreditables.
+//
+// Un toggle centrado: son dos vistas del mismo listado y el peso visual va en el medio, no
+// arrinconado. Al ancho del contenido —no a todo lo ancho de la tarjeta— para que las dos
+// opciones se lean como un par y no como una barra de navegación.
+.nws-enabled-list__scope {
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
+  margin-bottom: var(--naotech-sizing-12);
+}
+
+// El aviso mientras se refiltra.
+//
+// Ocupa el sitio de la tabla y no más: con el alto libre, la tarjeta se encogería en cada
+// búsqueda y la página daría un salto —que es justo la sensación de «se refresca mucho» que
+// se quiere quitar—. 12rem es el alto de una tabla corta, así que el salto es mínimo.
+.nws-enabled-list__reloading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 12rem;
+}
+
+// El visor de carnets antes de imprimir.
+//
+// Existe para no gastar 200 hojas en carnets sin foto: hasta ahora, para ver el PDF había que
+// entrar al detalle del lote, volver y entrar al siguiente.
+.nws-card-preview {
+  @include modal.ancho-fijo(52rem);
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-12);
+  }
+
+  // De lote en lote: flechas a los lados y el conteo en medio.
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--naotech-sizing-12);
+
+    span {
+      color: var(--naotech-app-color-700);
+    }
+  }
+
+  // Alto FIJO y no un tope: con `max-height` el modal crecía al llegar el PDF y volvía a
+  // moverse al pasar al lote siguiente, que es justo lo que QA reportó dos veces del otro
+  // modal. El espacio se reserva desde el principio.
+  &__viewer {
+    width: 100%;
+    height: 26rem;
+    flex: none;
+    border: 1px solid var(--naotech-app-color-200);
+    border-radius: var(--naotech-sizing-8);
+    background-color: var(--naotech-color-gray-100, #f7f7f7);
+
+    &--empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--naotech-app-color-700);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--naotech-sizing-16);
+  }
+}
+
+// El selector de filas por página, pegado a la paginación. Va en su propia fila y no suelto
+// entre los filtros: no filtra nada, decide cuánto se ve —y en acreditables, cuánta gente se
+// puede acreditar de una vez—.
+.nws-page-size {
+  display: flex;
+  align-items: center;
+  gap: var(--naotech-sizing-12);
+
+  // El NwtDropdown no tiene prop ni token de ancho: hereda los ~200px intrínsecos de su
+  // input, y así empuja la paginación fuera de la fila. Se acota el dropdown y el input se
+  // ajusta a él, igual que en «Movimientos».
+  .nwt-dropdown {
+    flex: none;
+    width: 11rem;
+
+    input {
+      width: 100%;
+      min-width: 0rem;
+    }
+  }
+}
+
+// Aviso de fase o momento sin tipos de acreditado: texto y botón en la misma línea.
+.nws-delivery__types-missing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}

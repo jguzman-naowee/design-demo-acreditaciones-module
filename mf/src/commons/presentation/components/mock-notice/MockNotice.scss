@@ -1,0 +1,10 @@
+// El aviso va por encima de la pantalla, con su mismo respiro lateral para que no
+// parezca pegado a la izquierda.
+.nws-mock-notice {
+  display: flex;
+  flex-direction: column;
+
+  > .nwt-alert {
+    margin: var(--naotech-sizing-20) var(--naotech-sizing-32) 0;
+  }
+}

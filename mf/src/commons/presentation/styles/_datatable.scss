@@ -1,0 +1,175 @@
+// Tablas cuyos títulos se pueden leer al estrechar la ventana o al ampliar el zoom.
+//
+// Reporte de QA: «los títulos de las tablas se agrupan y no se pueden leer». Medido en el
+// listado de acreditados, y el mecanismo es del SDK:
+//
+//     .nwt-datatable__table   { overflow: auto }        // la barra existe…
+//     .nwt-datatable__table > table { width: 100% }     // …pero nada puede desbordar
+//     .nwt-datatable__title   { white-space: nowrap; overflow: hidden }
+//     .nwt-datatable__title, __cell { min-width: 0 }    // se encogen sin suelo
+//
+// Y las anchuras de columna son PORCENTAJES que suman 100%, mientras que la casilla de
+// selección (48px), la columna de acciones (64px), los huecos entre columnas (16px cada uno) y
+// el relleno de la fila se llevan otros ~300px. Así que las columnas nunca reciben su
+// porcentaje: a 1024px de tabla, un 12,5% se queda en 42px. El título, con `nowrap` y
+// `overflow: hidden` y sin puntos suspensivos, sale cortado a media palabra —«TIPO DE
+// ACREDITAD», «FECHA DE EMISI»—, que es justo lo que se reportó.
+//
+// Dos reglas, las dos sobre la TABLA y no sobre las columnas: si se le pone suelo a las celdas
+// de la cabecera, éstas dejan de encogerse y las de las filas siguen encogiéndose —el suelo
+// tendría que ir en las dos—, y la cabecera se desalinea de su tabla. Medido: 10 columnas
+// descuadradas. Sobre la tabla, cabecera y filas crecen juntas.
+
+// Por debajo de esto la tabla no se sigue estrechando: desborda, y la barra horizontal que el
+// SDK ya tiene entra a funcionar. Es preferible desplazar a que los títulos queden ilegibles.
+//
+// 60rem sale de medir: con el reparto de columnas del módulo, es el ancho a partir del cual
+// todos los títulos caben. Y queda por debajo del ancho útil de un portátil de 1366px, así que
+// ahí no aparece ninguna barra.
+$ancho-minimo: 60rem !default;
+
+// El modo tarjeta del SDK (≤640px) esconde la cabecera y envuelve cada fila. Ahí un ancho
+// mínimo forzaría un desplazamiento horizontal y rompería ese modo, así que empieza después.
+@media (min-width: 641px) {
+  .nwt-datatable__table > table {
+    // La tabla ocupa el ancho disponible, no el de su contenido.
+    //
+    // foundations 4.x declara `width: max-content`: la tabla mide lo que mide su contenido y
+    // las columnas se reparten el sobrante a partes iguales. Pero las columnas del módulo son
+    // PORCENTAJES (`nwt-width-xs-N`), y un porcentaje contra un ancho que sale del propio
+    // contenido es circular: el navegador lo resuelve a cero. Medido en staging, con el CSS del
+    // anfitrión: títulos de 2px y tabla de 960px dentro de un contenedor de 1548px.
+    //
+    // Con foundations 2.x no hacía falta porque la tabla ya era `width: 100%`. Hay que ponerlo
+    // acá —sin capa— y no confiar en la copia del SDK del módulo, porque el anfitrión carga la
+    // suya también sin capa (`/components` en su styles.scss) y a esa no hay cómo ganarle desde
+    // dentro de una capa.
+    width: 100%;
+    min-width: $ancho-minimo;
+  }
+}
+
+// Y como red de seguridad, un título de varias palabras parte en dos líneas en lugar de
+// cortarse a media palabra. No sustituye al ancho mínimo —una palabra sola no se puede
+// partir— pero cubre las tablas del módulo que tengan otro reparto de columnas.
+.nwt-datatable__title {
+  white-space: normal;
+}
+
+// La columna de acciones: 4rem en vez de los 10rem que el SDK reserva por defecto.
+//
+// Medido: el kebab ocupa 32px y la columna 160px, o sea 128px de hueco a la derecha de cada
+// tabla. Andrés lo vio en la pantalla de tipos: «ahí queda cule espacio sin utilizar».
+//
+// Va acotado a `.nwt-datatable` y no a `:root` para no tocarle las tablas al anfitrión: medido
+// en Sports, sin el módulo montado no hay NI UN elemento con clase `nwt-*`.
+//
+// Dos pantallas del módulo ya lo declaraban en su propio SCSS (entrega y control de accesos);
+// se quitan de allá y queda acá una sola vez.
+.nwt-datatable {
+  --naotech-datatable-actions-width: 4rem;
+}
+
+// La excepción: la pantalla de entrada pone un botón «Trabajar aquí» en esa columna, no un
+// kebab, y con 4rem no cabe. Si otra tabla vuelve a poner un botón ahí, este es el sitio.
+.nws-event-entry .nwt-datatable {
+  --naotech-datatable-actions-width: 10rem;
+}
+
+// Las celdas no se estiran por su contenido.
+//
+// El SDK no les declara `flex`, así que heredan `flex: 0 1 auto` con `min-width: auto`: un
+// nombre largo —o unas etiquetas, como los permisos del tipo— estira su celda por encima del
+// `width: N%` y corre las columnas de ESA fila, desalineándola de la cabecera. Medido: 4
+// columnas descuadradas en la tabla de tipos al meterle etiquetas en una celda.
+//
+// Con `min-width: 0` y sin crecer, cabecera y celdas se reducen igual. El texto lo recorta la
+// regla `> span` del propio SDK.
+//
+// Estaba repetida en el SCSS de dos secciones (entrega y control de accesos) con este mismo
+// comentario; queda acá una vez, para todas las tablas del módulo.
+//
+// foundations 4.x SÍ declara `flex`: `1 0 var(--naotech-datatable-column-min-width, 0)`, o sea
+// con base 0 y a crecer. Con base 0 el `width: N%` de la columna no cuenta —en un contenedor
+// flex manda la base, no el ancho—, y con solo `flex-grow: 0` encima la columna se quedaba en
+// 0px. Así que se declara el `flex` entero: base `auto` para que el porcentaje mande, a
+// encogerse, sin crecer. Es lo que el SDK 2.x heredaba solo y lo que este reparto de columnas
+// asume.
+//
+// Sin las columnas de control (la casilla) ni las de acciones: esas ya traen su `flex` y su
+// `min-width` en el SDK y no deben encogerse. Y solo desde 641px, porque el modo tarjeta
+// (≤640px) pone cada celda a `flex: 1 1 100%` y esto se lo desharía.
+@media (min-width: 641px) {
+  .nwt-datatable__title:not(.nwt-datatable__title--control, .nwt-datatable__title--actions),
+  .nwt-datatable__cell:not(.nwt-datatable__cell--control, .nwt-datatable__cell--actions) {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  // El título recorta; la celda no (más abajo, «el dato que no cabe BAJA de línea»). Va aparte
+  // porque `:not()` sube la especificidad de la regla de arriba y un `overflow` ahí le ganaría
+  // al de la celda.
+  .nwt-datatable__title {
+    overflow: hidden;
+  }
+}
+
+// Una columna que se queda con el espacio que sobra.
+//
+// El ancho de cada columna es un porcentaje FIJO de la fila, así que no tiene nada que ver con
+// lo que lleva dentro: medido en el listado de lotes, 387px de 1139 eran holgura, y la columna
+// de «Lote» se llevaba 155px para un contenido de 60. Pero los porcentajes tienen que sumar el
+// total: si se dejan todas justas, ese sobrante reaparece como un hueco al final de la fila.
+//
+// O sea que hay que elegir QUIÉN se queda el sobrante, y por defecto se lo reparten todas —de
+// ahí los huecos entre un número y la cabecera de al lado—. Con esto, las columnas de dato
+// corto se quedan justas y una sola crece: la que de verdad aprovecha el espacio, porque su
+// contenido es largo o variable.
+//
+// Va en la cabecera Y en la celda de esa columna, o se desalinean.
+.nwt-datatable__title.nws-datatable-fill,
+.nwt-datatable__cell.nws-datatable-fill {
+  flex-grow: 1;
+}
+
+// El dato que no cabe BAJA de línea, no se esconde.
+//
+// El SDK recorta con puntos suspensivos: `.nwt-datatable__cell > span { white-space: nowrap;
+// text-overflow: ellipsis; overflow: hidden }`. En pantalla ancha no se nota, pero al estrechar
+// —o con el zoom subido— la tabla queda llena de «Luis David …», «10092408…», «25 de a…»: un
+// listado de acreditados donde no se puede leer a quién se acreditó no sirve de nada.
+//
+// Con esto la celda envuelve y la fila crece: medido a 1000px de ventana, la fila pasa de 49px
+// a 97px y NADA queda oculto. Solo pasa cuando hace falta: en pantalla ancha nada envuelve y la
+// fila se queda en su alto de siempre.
+//
+// `break-word` y no `anywhere`: parte una palabra sola SOLO cuando no cabe ni en una línea
+// entera. Con `anywhere` el navegador partía el documento a media cifra —«150001002 / 001»—, y
+// un número de identidad partido se transcribe mal. Las columnas de documento llevan ancho para
+// no llegar a eso.
+.nwt-datatable__cell > span,
+.nwt-datatable__data > span {
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: break-word;
+  text-overflow: clip;
+}
+
+// Y la celda deja de recortar en vertical, que es lo que dejaría la segunda línea a medias.
+.nwt-datatable__cell {
+  overflow: visible;
+}
+
+// Los huecos entre columnas, de 16px a 12px.
+//
+// Con diez columnas son 160px de la fila que no son de nadie. Y hacían falta: con el reparto
+// que cada título necesita —medido uno por uno— la suma se pasaba del ancho disponible y el
+// navegador encogía todas las columnas un 2,4%, lo justo para recortar «PERMISOS». Cuatro
+// píxeles menos por hueco devuelven 40px y ahí ya cabe todo, sin subir el ancho mínimo (que
+// habría sacado barra horizontal en un portátil de 1366).
+.nwt-datatable__header,
+.nwt-datatable__record,
+.nwt-datatable__subheader,
+.nwt-datatable__totals {
+  column-gap: var(--naotech-sizing-12);
+}

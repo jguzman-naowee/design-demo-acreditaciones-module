@@ -1,0 +1,185 @@
+// Vista sin el marco de la aplicación: la tarjeta se centra sobre el fondo.
+.nws-accreditation-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: var(--naotech-sizing-16);
+  width: 100%;
+  padding: var(--naotech-sizing-32);
+  box-sizing: border-box;
+
+  // El carril lleva el ancho de la tarjeta; el botón se queda con el suyo. Antes el
+  // `max-width` iba en el propio enlace, así que su área pulsable era toda la franja de 56rem
+  // y un clic al lado del texto volvía atrás sin querer.
+  &__back-rail {
+    align-self: center;
+    display: flex;
+    width: 100%;
+    max-width: 56rem;
+  }
+
+  &__back {
+    font-size: var(--naotech-smalltext-font-size);
+
+    .nwt-icon {
+      --naotech-icon-dimension: var(--naotech-sizing-20);
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 56rem;
+    overflow: hidden;
+    border: 1px solid var(--naotech-app-color-200);
+    border-radius: var(--naotech-sizing-20);
+    background: var(--naotech-app-background);
+    box-sizing: border-box;
+  }
+
+  &__banner {
+    display: flex;
+    align-items: center;
+    // Envuelve en pantalla estrecha: son el retrato, el nombre y sus chips, y sin esto se
+    // comprimen hasta que el nombre no cabe.
+    flex-wrap: wrap;
+    gap: var(--naotech-sizing-20);
+    padding: var(--naotech-sizing-32);
+    // El SDK no tiene tema morado; el color sí está en la paleta.
+    background: var(--naotech-color-purple-700);
+  }
+
+  &__photo {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    // El anillo de la foto: NwtAvatar no tiene prop de borde de color.
+    padding: var(--naotech-sizing-4);
+    border-radius: 50%;
+    background: var(--naotech-positive-color-700);
+  }
+
+  // La foto real ocupa el mismo hueco que el avatar de iniciales, con el anillo del
+  // contenedor haciendo de marco.
+  &__photo-image {
+    width: var(--naotech-sizing-72, 4.5rem);
+    height: var(--naotech-sizing-72, 4.5rem);
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--naotech-app-background);
+  }
+
+  &__photo-badge {
+    position: absolute;
+    right: 50%;
+    bottom: calc(var(--naotech-sizing-12) * -1);
+    transform: translateX(50%);
+    // El verde del badge y el del anillo son el mismo: sin este filete blanco
+    // se ven como una sola mancha.
+    box-shadow: 0rem 0rem 0rem var(--naotech-sizing-2)
+      var(--naotech-app-background);
+    white-space: nowrap;
+  }
+
+  &__identity {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-12);
+    min-width: 0rem;
+  }
+
+  &__name {
+    color: var(--naotech-app-background);
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--naotech-sizing-8);
+
+    // Los chips quiet toman el tema primario (naranja), que sobre el morado
+    // choca: se los repinta blancos con texto morado sin salirse del SDK.
+    .nwt-badge {
+      --naotech-theme-color-100: var(--naotech-app-background);
+      --naotech-theme-color-800: var(--naotech-color-purple-700);
+    }
+  }
+
+  &__block {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-16);
+    padding: var(--naotech-sizing-24) var(--naotech-sizing-32);
+
+    & + & {
+      border-top: 1px solid var(--naotech-app-color-200);
+    }
+  }
+
+  &__strip {
+    display: flex;
+    align-items: center;
+    // Idem: cuatro campos con sus separadores no caben en un móvil de una fila.
+    flex-wrap: wrap;
+    gap: var(--naotech-sizing-24);
+  }
+
+  // El divider vertical del SDK mide height: 100%, que colapsa en un flex
+  // alineado al centro: necesita altura propia.
+  &__strip-divider {
+    --naotech-divider-height: var(--naotech-sizing-40);
+  }
+
+  &__zones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__zone-text {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-2);
+    min-width: 0rem;
+
+    small {
+      color: var(--naotech-app-color-600);
+    }
+  }
+
+  &__zone {
+    .nwt-card__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      row-gap: var(--naotech-sizing-12);
+      text-align: center;
+      color: var(--naotech-app-color-900);
+    }
+
+    .nwt-avatar-icon {
+      --naotech-avatar-icon-dimension: var(--naotech-sizing-40);
+    }
+  }
+
+  // El nwtSize del NwtTextLink apunta a tokens que el SDK no define, así que el
+  // tamaño se hereda del padre; y su icono sale a 24px si no se ajusta.
+  &__download {
+    font-size: var(--naotech-smalltext-font-size);
+
+    .nwt-icon {
+      --naotech-icon-dimension: var(--naotech-sizing-20);
+    }
+  }
+
+  &__brand {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    column-gap: var(--naotech-sizing-6);
+    padding: var(--naotech-sizing-16);
+    border-top: 1px solid var(--naotech-app-color-200);
+    color: var(--naotech-app-color-700);
+  }
+}

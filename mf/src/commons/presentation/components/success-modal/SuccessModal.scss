@@ -1,0 +1,80 @@
+@use '../../styles/modal';
+
+.nws-success-modal {
+  @include modal.ancho-fijo(30rem);
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--naotech-sizing-12);
+    padding: var(--naotech-sizing-8) 0rem var(--naotech-sizing-16);
+    text-align: center;
+  }
+
+  // Mismas medidas que el círculo del NwtConfirmation. Se usa el verde directo
+  // en vez de nwt-theme="positive" en el modal: ese atributo remapea las
+  // variables primarias de todo el subárbol y también teñiría el botón.
+  &__icon {
+    --naotech-icon-color: var(--naotech-app-background);
+    --naotech-icon-dimension: var(--naotech-sizing-32);
+
+    display: flex;
+    width: 4.5rem;
+    height: 4.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--naotech-positive-color-700);
+    margin-bottom: var(--naotech-sizing-8);
+  }
+
+  &__title {
+    margin: 0rem;
+    font-size: var(--naotech-sizing-20);
+    font-weight: var(--naotech-font-weight-bold);
+    color: var(--naotech-app-color-900);
+  }
+
+  &__message {
+    margin: 0rem;
+    font-size: var(--naotech-sizing-14);
+    color: var(--naotech-app-color-800);
+  }
+
+  // El cuerpo centra su contenido; la alerta debe ocupar el ancho completo y su
+  // texto se lee alineado a la izquierda, como el de las viñetas.
+  &__caution {
+    width: 100%;
+    text-align: left;
+  }
+
+  &__bullets {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-8);
+    margin: var(--naotech-sizing-8) 0rem 0rem;
+    padding: 0rem;
+    list-style: none;
+  }
+
+  &__bullet {
+    --naotech-icon-color: var(--naotech-positive-color-600);
+    --naotech-icon-dimension: var(--naotech-sizing-16);
+
+    display: flex;
+    align-items: flex-start;
+    column-gap: var(--naotech-sizing-8);
+    text-align: left;
+    font-size: var(--naotech-sizing-14);
+    color: var(--naotech-app-color-800);
+  }
+
+  &__footer {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    padding-top: var(--naotech-sizing-8);
+  }
+}

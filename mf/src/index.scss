@@ -1,0 +1,14 @@
+@use '@naowee-tech/sdk-frontend-foundations';
+@use '@naowee-tech/sdk-frontend-foundations/components';
+@use '@naowee-tech/sdk-frontend-foundations/icons';
+
+// Las tablas del módulo. En producción las trae `module-foundations.scss` al montarse; este
+// cascarón suelto monta `AccreditationsApp` directamente y no pasa por ahí, así que sin esto
+// recibe el `datatable` de foundations 4.x tal cual —`width: max-content` y columnas a
+// `flex: 1 0 0`— y el reparto por porcentajes de las pantallas se descuadra, igual que en la
+// suite. Con esto el desarrollo local y el e2e miden lo mismo que ve el anfitrión.
+@use './commons/presentation/styles/datatable';
+
+#root {
+  height: 100%;
+}

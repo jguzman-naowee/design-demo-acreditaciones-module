@@ -1,0 +1,106 @@
+.nws-access-validate {
+  width: 100%;
+  box-sizing: border-box;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-24);
+    padding: var(--naotech-sizing-28) var(--naotech-sizing-32);
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  &__reader,
+  &__logs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: var(--naotech-sizing-6);
+  }
+
+  &__required {
+    // El token es `--naotech-negative-color-600`. El que había,
+    // `--naotech-negative-color-normal`, no existe en foundations —su escala va de 050 a 900—
+    // y sin respaldo la declaración quedaba inválida: el asterisco heredaba el color del
+    // texto y no salía rojo.
+    color: var(--naotech-negative-color-600);
+  }
+
+  // El botón se alinea con el pie de los campos de su fila, no con su etiqueta.
+  &__submit {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  // El resultado de la lectura: lo que mira quien está en la puerta, así que el
+  // borde de color hace de semáforo antes de que nadie lea el texto.
+  &__outcome {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-16);
+    padding: var(--naotech-sizing-20);
+    border-radius: var(--naotech-sizing-12);
+    border-left: 4px solid;
+
+    // El semáforo estaba SIN color: `--naotech-*-color-normal` no existe en foundations y no
+    // llevaba respaldo, así que `border-color` quedaba inválido y el borde salía del color del
+    // texto. Es el aviso que mira quien está en la puerta, y era justo lo que no se veía.
+    &--granted {
+      border-color: var(--naotech-positive-color-600);
+      background-color: var(--naotech-positive-color-050);
+    }
+
+    &--denied {
+      border-color: var(--naotech-negative-color-600);
+      background-color: var(--naotech-negative-color-050);
+    }
+  }
+
+  &__person {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-2);
+  }
+
+  &__results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__result {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+    min-width: 14rem;
+    padding: var(--naotech-sizing-12);
+    border-radius: var(--naotech-sizing-8);
+    background-color: var(--naotech-app-background);
+
+    small {
+      color: var(--naotech-text-color-secondary, #6b6b6b);
+    }
+  }
+}

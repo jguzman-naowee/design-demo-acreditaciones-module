@@ -1,0 +1,46 @@
+// El buscador del módulo: que quepa su propio placeholder.
+//
+// El `.nwt-searchbox` del SDK va con `width: var(--naotech-searchbox-width, auto)`, y ese
+// `auto` es el ancho intrínseco de un `<input>` —20 caracteres—: 214px de caja, de los que
+// 60 se los llevan el icono, los huecos y el relleno. Quedan 154px de texto útil.
+//
+// Medido el 2026-09-08 con la tipografía real del input (14px Inter), lo que pide cada
+// placeholder del módulo, ya sumado el cromo de la caja:
+//
+//     105  Buscar
+//     133  Buscar lote
+//     156  Buscar usuario
+//     244  Buscar por nombre o código
+//     246  Buscar el evento por nombre
+//     273  Buscar por nombre o documento          ← el de las tres pantallas de entrega
+//     296  Buscar por persona, acción o detalle
+//     345  Buscar acreditado por nombre o documento
+//
+// O sea que CINCO de los ocho no caben en los 214 de por defecto. El de entrega se cortaba
+// 59px —«Buscar por nombre o do…»—, que es lo que reportó Andrés. Y no dependía del ancho de
+// la ventana: medido igual a 1650, 1440 y 1280, porque la caja no crece.
+//
+// 22rem = 352px cubre al más largo con 7px de sobra. Se elige por el PEOR y no por el más
+// común a propósito: con un valor por pantalla volvemos a donde estábamos.
+//
+// POR QUÉ ACÁ Y NO EN CADA PANTALLA. Esto ya estaba arreglado… en una sola:
+// `.nws-accreditation-movements` declaraba `17.5rem` con el comentario «el ancho por defecto
+// del searchbox recorta su propio placeholder». Mismo fallo, resuelto donde se vio y no donde
+// estaba, y por eso volvió a aparecer en el listado principal. Esa copia se borró.
+//
+// El token se declara en la raíz del módulo y se HEREDA, así que alcanza también a los
+// buscadores que viven dentro de los modales —que salen por portal fuera del árbol de la
+// aplicación y llevan la marca por su cuenta, ver NwsModal—.
+.nws-accreditations-module {
+  --naotech-searchbox-width: 22rem;
+
+  // Y que la fila de filtros no lo aplaste. El ancho de arriba es solo un TECHO: el
+  // `.nwt-searchbox` es un hijo flex más y con el `flex-shrink: 1` de por defecto cede
+  // primero. Medido en «Gestión de acreditables», donde comparte fila con tres desplegables:
+  // se quedaba en 298px a 1650, 235 a 1440 y 214 a 1280 —o sea, cortado otra vez—.
+  //
+  // Con `flex-shrink: 0` deja de ceder; lo que cede es la fila, que envuelve (más abajo).
+  .nwt-searchbox {
+    flex-shrink: 0;
+  }
+}

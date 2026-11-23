@@ -1,0 +1,9 @@
+.nws-quota-chip {
+  display: flex;
+  align-items: center;
+  min-width: 0rem;
+
+  &__empty {
+    color: var(--naotech-app-color-700);
+  }
+}

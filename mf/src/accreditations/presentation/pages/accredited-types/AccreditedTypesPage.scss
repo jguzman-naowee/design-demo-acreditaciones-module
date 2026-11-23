@@ -1,0 +1,298 @@
+@use '../../../../commons/presentation/styles/modal';
+
+.nws-accredited-types {
+  display: flex;
+  // El .nwt-app__body del NwtApplication anidado es display:flex; sin ancho
+  // explícito la sección se encoge al contenido en lugar de llenar el área.
+  width: 100%;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  // El respiro va acá y no en la sección: la franja del evento es hermana de este div y tiene
+  // que llegar a los bordes, como en el resto del módulo.
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-24);
+    padding: var(--naotech-sizing-28) var(--naotech-sizing-32);
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--naotech-sizing-16);
+    margin-bottom: var(--naotech-sizing-16);
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: var(--naotech-sizing-12);
+  }
+
+  // El selector de evento y el botón de crear comparten la esquina derecha; el
+  // botón se alinea con el input del selector, no con su etiqueta.
+  &__actions {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--naotech-sizing-16);
+  }
+}
+
+.nws-accredited-type-modal {
+  @include modal.ancho-fijo(37.5rem);
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-24);
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: var(--naotech-sizing-6);
+  }
+
+  // En edición el tipo y su código se muestran, no se editan: cambiar el código
+  // dejaría huérfanas las acreditaciones ya emitidas con él.
+  &__fixed {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--naotech-sizing-4);
+  }
+
+  &__required {
+    // El token es `--naotech-negative-color-600`. El que había,
+    // `--naotech-color-negative-500`, no existe en foundations, así que esto venía cayendo al
+    // hex quemado que llevaba al lado: rojo, pero no el del sistema de diseño.
+    color: var(--naotech-negative-color-600);
+    margin-left: var(--naotech-sizing-2);
+  }
+
+  // Los permisos elegidos, con su espacio reservado: se pinta siempre, con dos filas de alto,
+  // y de ahí en adelante scrollea dentro. Así el modal no se mueve al agregar ni al quitar.
+  // La zona de los permisos elegidos, con su alto RESERVADO: ahora es una fila por permiso
+  // —cada una con su campo de usos— y sin alto fijo el modal crecería con cada permiso, que
+  // es lo que QA reportó dos veces. Tres filas a la vista y el resto scrollea dentro.
+  &__chips {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--naotech-sizing-8);
+
+    @include modal.zona-fija-alto(11rem);
+  }
+
+  // Una fila: su número, el nombre, sus usos, las flechas para moverlo y la X al final.
+  &__picked {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: var(--naotech-sizing-12);
+      padding: var(--naotech-sizing-6) var(--naotech-sizing-8);
+      border-radius: var(--naotech-sizing-8);
+      background: var(--naotech-app-color-050);
+
+      // El nombre se lleva el espacio que sobra y se recorta si hace falta: el campo de usos,
+      // las flechas y la X tienen que quedar SIEMPRE a la vista.
+      //
+      // Va por CLASE y ya no por `span:first-child`: desde que el número de orden abre la
+      // fila, el primer span es él, y la regla se la estaba llevando el sitio equivocado.
+      > .nws-accredited-type-modal__nombre {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      small {
+        flex: 0 0 auto;
+        color: var(--naotech-app-color-600);
+      }
+
+      // El campo de usos: corto, que es un número de dos cifras.
+      .nwt-input-box,
+      .nwt-text-field {
+        flex: 0 0 var(--naotech-sizing-80, 5rem);
+        width: var(--naotech-sizing-80, 5rem);
+      }
+    }
+  }
+
+  // El número de orden: es el `order` que se guarda, y con el que el carnet decide qué
+  // icono va primero y cuál se recorta. De ancho fijo para que los nombres queden alineados
+  // aunque se pase de nueve permisos.
+  &__orden {
+    display: flex;
+    flex: 0 0 var(--naotech-sizing-20, 1.25rem);
+    align-items: center;
+    justify-content: center;
+    color: var(--naotech-app-color-600);
+  }
+
+  // Las flechas para mover un permiso. Juntas y del mismo tamaño que la X, para que la fila
+  // no cambie de alto.
+  &__mover {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--naotech-sizing-2, 0.125rem);
+
+    button {
+      display: flex;
+      align-items: center;
+      padding: 0;
+      border: none;
+      background: none;
+      color: var(--naotech-app-color-700);
+      cursor: pointer;
+
+      // Deshabilitada y no escondida: si la flecha desapareciera en los extremos, la fila
+      // cambiaría de ancho al moverse y el usuario perdería el sitio donde estaba pulsando.
+      &:disabled {
+        color: var(--naotech-app-color-300);
+        cursor: default;
+      }
+    }
+  }
+
+  // Quitar un permiso. Es un botón porque hace algo, no una decoración.
+  &__quitar {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--naotech-app-color-700);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--naotech-negative-color-600);
+    }
+  }
+
+  // El aviso de la zona vacía, para que no parezca un hueco sin explicación.
+  &__chips-empty {
+    color: var(--naotech-app-color-600);
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--naotech-sizing-12);
+    padding-top: var(--naotech-sizing-16);
+    border-top: var(--naotech-app-border-1-200);
+  }
+}
+
+// La línea del aviso bajo «Límite de validaciones» tiene su alto reservado: ese campo siempre
+// dice algo —por qué está deshabilitado, o a qué permisos se aplica— y sin alto fijo un texto
+// que parta en dos líneas movería el modal.
+.nws-accredited-type-modal .nwt-input-box__message {
+  height: var(--naotech-sizing-16);
+  overflow: hidden;
+}
+
+// Los permisos en la fila: dos etiquetas y un «+N» que abre el resto.
+.nws-accredited-types__permissions {
+  display: flex;
+  // Arriba y no al centro: cuando los nombres ocupan dos líneas, el «+N» tiene que quedar a la
+  // altura de la primera y no flotando en la mitad.
+  align-items: flex-start;
+  gap: var(--naotech-sizing-8);
+  // La celda tiene el ancho de su columna: nada de estirarla y desalinearla de la cabecera.
+  min-width: 0rem;
+}
+
+// Los nombres BAJAN de línea, no se recortan.
+//
+// Antes iban con puntos suspensivos, y con el tope pegado al permiso —«Área de alimentación y
+// campo de entrenamiento (20)»— lo primero que se comía el recorte era justo el tope: medido,
+// la celda cortaba en «…campo de entren…» y el número no se veía en ninguna fila.
+//
+// Es la misma regla que el módulo ya aplica a las demás celdas por el reporte de QA: lo que no
+// cabe pasa a la línea de abajo. La fila crece solo cuando hace falta.
+.nws-accredited-types__permissions-list {
+  min-width: 0rem;
+  overflow-wrap: break-word;
+}
+
+// El «+N». Es un botón porque abre algo, no una decoración: hereda el estilo del contador y se
+// deja ver como pulsable.
+.nws-accredited-types__permissions-more {
+  flex: 0 0 auto;
+  padding: var(--naotech-sizing-2) var(--naotech-sizing-8);
+  // Hereda el tipo de la celda a propósito: lo que lo hace ver pulsable es la pastilla y el
+  // hover, no un tamaño de letra distinto al de la fila.
+  font: inherit;
+  border: 1px solid var(--naotech-app-color-300, #d6d6d6);
+  border-radius: var(--naotech-sizing-16);
+  background: var(--naotech-app-background);
+  color: var(--naotech-app-color-700);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--naotech-primary-color-normal);
+    color: var(--naotech-primary-color-normal);
+  }
+}
+
+// La lista completa de permisos del tipo.
+.nws-type-permissions-modal {
+  @include modal.ancho-fijo(30rem);
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-12);
+
+    // Alto fijo y scroll dentro: un tipo con ocho permisos no debe abrir un modal el doble de
+    // alto que otro con dos.
+    @include modal.cuerpo-fijo(22rem);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--naotech-sizing-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      row-gap: var(--naotech-sizing-2);
+      padding: var(--naotech-sizing-8) var(--naotech-sizing-12);
+      border: 1px solid var(--naotech-app-color-200, #e6e6e6);
+      border-radius: var(--naotech-sizing-8);
+    }
+
+    small {
+      color: var(--naotech-text-color-secondary, #6b6b6b);
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.nws-event-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--naotech-sizing-8);
+
+  &__event {
+    display: flex;
+    flex-direction: column;
+    // El nombre se queda con el ancho que sobre en la banda, en vez de un tope fijo.
+    //
+    // Tenía `max-width: 26rem` —416 px— y con eso «Juegos Intercolegiados 2026 - Mini
+    // migración STG» se cortaba en «Mini migr…» aunque la banda ocupa toda la fila y al lado
+    // había sitio de sobra. Lo reportó QA.
+    //
+    // `min-width: 0` es lo que hace que el recorte siga funcionando: sin él, un elemento
+    // flexible no baja de su contenido y en vez de poner puntos suspensivos empuja a los
+    // contadores fuera de la banda. Y el `flex` cede primero, así que cuando la banda lleva
+    // contadores son ellos los que mandan.
+    flex: 1 1 auto;
+    min-width: 0;
+
+    // El rótulo es contexto, no el dato: se lee después del nombre, que va en negrita.
+    small {
+      color: var(--naotech-app-color-500);
+    }
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+.nws-file-thumbnail {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--naotech-sizing-24);
+  height: var(--naotech-sizing-24);
+  box-sizing: border-box;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    // Los svg del catálogo no traen tamaño fijo ni relación de aspecto conocida.
+    object-fit: contain;
+  }
+
+  // Sin archivo el hueco se reserva igual, para que la fila no salte y los textos de las
+  // tarjetas queden alineados entre sí. Pero VACÍO, sin pintar nada.
+  //
+  // Llevaba un recuadro gris redondeado, y en una tabla donde solo algunos permisos tienen
+  // icono eso deja una columna de cajitas grises que dicen «acá hay algo» sin haber nada. Se
+  // vio en los permisos de una acreditación de dev: dos huecos grises y un icono de verdad.
+  //
+  // El icono que SÍ existe se pinta tal cual, sin fondo: si sale como un cuadro negro, es el
+  // archivo que subieron al catálogo, no esta hoja.
+  &--empty {
+    background: none;
+  }
+}
