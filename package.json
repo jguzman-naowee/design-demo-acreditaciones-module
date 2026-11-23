@@ -1,0 +1,38 @@
+{
+  "name": "design-demo-acreditaciones-module",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint src",
+    "verificar": "node scripts/verificar.mjs"
+  },
+  "dependencies": {
+    "@naowee-tech/sdk-frontend-foundations": "^4.1.0",
+    "@naowee-tech/sdk-frontend-react": "^3.1.0",
+    "@naowee-tech/sdk-frontend-web": "^3.2.0",
+    "@naowee-tech/sdk-react-components": "^3.2.0",
+    "@rolster/commons": "^4.2.3",
+    "@rolster/dates": "^4.1.6",
+    "@rolster/invertly": "^4.3.1",
+    "@rolster/signals": "^4.2.2",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-router-dom": "^7.18.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "esbuild": "^0.28.1",
+    "esbuild-sass-plugin": "^3.7.0",
+    "eslint": "^10.3.0",
+    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "globals": "^17.6.0",
+    "sass": "^1.101.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.59.2"
+  }
+}

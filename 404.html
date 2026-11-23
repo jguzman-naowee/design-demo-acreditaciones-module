@@ -1,0 +1,8 @@
+<!doctype html><meta charset="utf-8"><title>Demo · Acreditaciones</title>
+<script>
+// GitHub Pages no tiene fallback de SPA: una ruta profunda del micro vuelve a su index con «?r=».
+(function(){var p=location.pathname,k='/mobile/apps/acreditaciones/',i=p.indexOf(k);
+if(i<0){location.replace(p.slice(0,p.indexOf('/',1)+1)||'/');return;}
+var rest=p.slice(i+k.length-1);
+location.replace(p.slice(0,i+k.length)+'index.html?r='+encodeURIComponent(rest+location.search)+location.hash);})();
+</script>

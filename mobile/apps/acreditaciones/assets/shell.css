@@ -1,0 +1,104 @@
+/* Marco de la demo con el diseño de Incentivos (sidebar 274px colapsable + header 88px + pie flotante).
+   Clases con prefijo `ish-` para no chocar con las del módulo. Independiente de la compilación: lo monta assets/shell.js. */
+:root{--ish-w:274px;--ish-wc:72px;--ish-h:88px;--ish-accent:var(--naotech-color-orange-700,#d74009);--ish-text:var(--naotech-color-gray-900,#282834);--ish-text2:var(--naotech-color-gray-700,#646587);--ish-border:var(--naotech-color-gray-200,#e7e9f3);--ish-border-dark:var(--naotech-color-gray-300,#d0d4e6);--ish-soft:var(--naotech-color-gray-400,#b4b9d4);--ish-hover:var(--naotech-color-gray-100,#f5f6fa);--ish-active:var(--naotech-color-orange-050,var(--ish-active));--ish-ok:var(--naotech-color-green-700,var(--ish-ok));--ish-font:var(--naotech-font-family-base,'Inter'),-apple-system,BlinkMacSystemFont,sans-serif}
+#sidebar{display:none!important}
+html.con-shell body{display:block;min-height:100vh;background:#fff}
+html.con-shell #root{position:relative;margin-left:var(--ish-w);padding-top:var(--ish-h);padding-bottom:76px;box-sizing:border-box;min-height:100vh;transition:margin-left .36s cubic-bezier(.32,.72,0,1)}
+html.con-shell.shell-colapsado #root{margin-left:var(--ish-wc)}
+html.con-shell:not(.shell-listo) #root,html.con-shell:not(.shell-listo) .ish-top,html.con-shell:not(.shell-listo) .ish-side{transition:none}
+
+/* Sidebar */
+.ish-side{position:fixed;z-index:10;top:0;left:0;bottom:0;width:var(--ish-w);background:#fff;border-right:1px solid var(--ish-border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;transition:width .36s cubic-bezier(.32,.72,0,1);font-family:var(--ish-font)}
+.ish-side *{box-sizing:border-box}
+.ish-logo{height:var(--ish-h);display:flex;align-items:center;gap:14px;padding:0 20px;border-bottom:1px solid var(--ish-border);flex-shrink:0}
+.ish-logo .ish-img:first-of-type{margin-left:auto}
+.ish-logo .ish-img:last-of-type{margin-right:auto}
+.ish-burger{background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;width:24px;height:24px;flex-shrink:0;border-radius:6px;color:var(--ish-text);transition:background .15s,transform .2s}
+.ish-burger:hover{background:rgba(0,0,0,.06)}.ish-burger:active{transform:scale(.9)}
+.ish-burger svg{transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.shell-colapsado .ish-burger svg{transform:rotate(180deg)}
+.ish-img{height:46px;width:auto;display:block;flex-shrink:0}
+.ish-sep{width:1px;height:36px;background:var(--ish-border);flex-shrink:0}
+.ish-nav{flex:1;padding:20px 0 10px;display:flex;flex-direction:column;gap:6px}
+.ish-section{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--ish-soft);padding:0 28px;line-height:16px;margin:10px 0 6px}
+.ish-section:first-child{margin-top:0}
+.ish-row{display:flex;align-items:center;gap:12px;height:44px;padding:0 8px 0 0;border-radius:6px;cursor:pointer;margin:0 10px;position:relative;color:var(--ish-text);text-decoration:none;background:none;border:0;font:inherit;width:calc(100% - 20px);text-align:left;transition:background .12s,margin .28s cubic-bezier(.32,.72,0,1)}
+.ish-row:hover{background:var(--ish-hover)}
+.ish-row:focus-visible{outline:2px solid var(--ish-accent);outline-offset:2px}
+.ish-row .ish-icon{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-left:28px;color:var(--ish-text2);position:relative;z-index:1}
+.ish-row .ish-icon svg{width:22px;height:22px}
+.ish-row .ish-lbl{flex:1;font-size:14px;font-weight:600;color:var(--ish-text);white-space:nowrap;overflow:hidden;max-width:200px;opacity:1;transition:opacity .2s ease .18s,max-width .36s cubic-bezier(.32,.72,0,1) .04s}
+.ish-bar{position:absolute;left:-6px;top:8px;width:4px;height:28px;background:var(--ish-accent);border-radius:25px;animation:ishBar .42s cubic-bezier(.16,1,.3,1) both}
+@keyframes ishBar{0%{opacity:0;transform:translateX(-8px) scaleY(.2)}55%{opacity:1}100%{opacity:1;transform:none}}
+.ish-row.on,.ish-row.on:hover{background:transparent}
+.ish-row--static,.ish-row--static:hover{cursor:default;background:none}
+.ish-row--noicon .ish-lbl{margin-left:64px}
+.shell-colapsado .ish-row--noicon{display:none}
+.shell-colapsado .ish-row--static:hover::before{background:transparent}
+.ish-row.on .ish-lbl{color:var(--ish-accent)}
+.ish-row.on .ish-icon{color:var(--ish-accent)}
+.ish-bottom{padding:8px 0;border-top:1px solid var(--ish-border)}
+.ish-bottom .ish-icon{color:var(--ish-soft)}
+
+/* Colapsado */
+.shell-colapsado .ish-side{width:var(--ish-wc)}
+.shell-colapsado .ish-img,.shell-colapsado .ish-sep,.shell-colapsado .ish-section{display:none}
+.shell-colapsado .ish-logo{justify-content:center;padding:0}
+.shell-colapsado .ish-row{justify-content:center;padding:0;gap:0;background:transparent}
+.shell-colapsado .ish-row .ish-lbl{max-width:0;opacity:0;pointer-events:none;transition:opacity .14s ease,max-width .3s cubic-bezier(.32,.72,0,1) .04s}
+.shell-colapsado .ish-row .ish-icon{margin-left:0}
+.shell-colapsado .ish-row::before{content:'';position:absolute;left:50%;top:50%;width:40px;height:40px;border-radius:8px;transform:translate(-50%,-50%);background:transparent;pointer-events:none;transition:background .2s;z-index:0}
+.shell-colapsado .ish-row:hover::before{background:var(--ish-hover)}
+.shell-colapsado .ish-row.on::before{background:var(--ish-active)}
+.shell-colapsado .ish-bar{display:none}
+
+/* Header */
+.ish-top{position:fixed;z-index:9;top:0;right:0;left:var(--ish-w);height:var(--ish-h);display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:0 24px;background:#fff;border-bottom:1px solid var(--ish-border);transition:left .36s cubic-bezier(.32,.72,0,1);font-family:var(--ish-font)}
+html.shell-colapsado .ish-top{left:var(--ish-wc)}
+.ish-top button{font:inherit;cursor:pointer}
+.ish-bellw,.ish-user{position:relative}
+.ish-bell{position:relative;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--ish-border);border-radius:50%;background:#fff;color:var(--ish-text2);transition:border-color .15s,transform .15s}
+.ish-bell:hover{border-color:var(--ish-border-dark)}.ish-bell:active{transform:scale(.96)}
+.ish-chip{display:flex;align-items:center;gap:10px;border:1px solid var(--ish-border);border-radius:9999px;padding:6px 8px 6px 6px;background:#fff;transition:border-color .15s}
+.ish-chip:hover,.ish-chip[aria-expanded=true]{border-color:var(--ish-border-dark)}
+.ish-ava{position:relative;flex-shrink:0}
+.ish-ring{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:var(--naotech-color-purple-100,#f3edff);color:var(--naotech-color-purple-700,#7c3aed)}
+.ish-dot{position:absolute;bottom:-1px;right:-1px;width:12px;height:12px;background:var(--ish-ok);border:2px solid #fff;border-radius:50%}
+.ish-info{display:flex;flex-direction:column;gap:1px;min-width:0;text-align:left}
+.ish-name{font-size:13px;font-weight:700;color:var(--ish-text);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ish-role{font-size:11px;color:var(--ish-text2);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ish-chev{display:flex;align-items:center;justify-content:center;width:24px;height:24px;color:var(--ish-text2);margin-left:4px}
+.ish-chev svg{width:14px;height:14px;transition:transform .2s}
+.ish-chip[aria-expanded=true] .ish-chev svg{transform:rotate(180deg)}
+.ish-dd{position:absolute;top:calc(100% + 8px);right:0;z-index:100;width:240px;background:#fff;border:1px solid var(--ish-border);border-radius:12px;box-shadow:var(--naotech-shadow-medium,0 4px 16px rgba(0,0,0,.12));padding:6px;animation:ishDd .18s ease-out}
+.ish-dd[hidden]{display:none}
+.ish-dd-label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ish-soft);padding:8px 10px 6px}
+.ish-dd-item{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border:0;border-radius:8px;background:none;color:var(--ish-text);font-size:13px;font-weight:600;text-decoration:none;text-align:left}
+.ish-dd-item:hover{background:var(--ish-hover)}
+.ish-dd-item svg{width:18px;height:18px;color:var(--ish-text2);flex:none}
+.ish-avisos{width:300px;padding:18px 20px}.ish-avisos h2{margin:0 0 6px;font-size:15px}.ish-avisos p{margin:0;font-size:13px;color:var(--ish-text2)}
+@keyframes ishDd{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* Pie flotante */
+.ish-pie{position:fixed;z-index:8;right:20px;bottom:16px;display:flex;align-items:center;gap:12px;height:44px;padding:0 18px;border:1px solid var(--ish-border);border-radius:999px;background:#fff;box-shadow:var(--naotech-shadow-small,0 1px 4px rgba(0,0,0,.08));font-size:13px;color:var(--ish-text2);pointer-events:none}
+.ish-pie img{height:24px;width:auto}.ish-pie .ish-sep{height:24px}
+
+@media (prefers-reduced-motion:reduce){.ish-side,.ish-top,html.con-shell #root,.ish-dd,.ish-bar{transition:none;animation:none}}
+@media (max-width:899px){.ish-side,.ish-top,.ish-pie{display:none}html.con-shell #root{margin-left:0;padding-top:0}}
+
+/* Cards de indicadores: geometría de la referencia de Incentivos (Revisión documental).
+   Etiqueta arriba a la izquierda, ícono en baldosa arriba a la derecha, cifra y nota debajo, a todo el ancho.
+   Los colores de la baldosa siguen siendo los del tema del SDK. */
+html.con-shell .nwt-stat-card{position:relative;display:flex;flex-direction:column;gap:12px;padding:18px 20px;border-radius:16px;background:#fff;border:0;box-shadow:0 1px 3px rgba(145,158,171,.08),0 6px 16px rgba(145,158,171,.1);transition:transform .15s,box-shadow .15s}
+html.con-shell .nwt-stat-card:hover{transform:translateY(-1px);box-shadow:0 1px 3px rgba(145,158,171,.08),0 8px 20px rgba(145,158,171,.14)}
+html.con-shell .nwt-stat-card__content{display:flex;flex-direction:column;gap:12px;width:100%;min-width:0}
+html.con-shell .nwt-stat-card__label{padding-right:52px;min-height:40px;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;line-height:1.3;color:var(--ish-text2)}
+html.con-shell .nwt-stat-card__value{font-size:30px;font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--ish-text)}
+html.con-shell .nwt-stat-card__hint{font-size:12px;line-height:1.4;color:var(--ish-text2);margin-top:2px}
+html.con-shell .nwt-stat-card__icon{position:absolute;top:18px;right:20px;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+html.con-shell .nwt-stat-card__icon .nwt-icon{display:flex}
+@media (prefers-reduced-motion:reduce){html.con-shell .nwt-stat-card{transition:none}html.con-shell .nwt-stat-card:hover{transform:none}}
+
+/* Chip de usuario sin menú (ya no hay «Cambiar de evento»): no es interactivo */
+.ish-chip--fijo{cursor:default}
+.ish-chip--fijo:hover{background:inherit;border-color:inherit}
