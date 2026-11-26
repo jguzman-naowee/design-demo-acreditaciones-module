@@ -5,6 +5,13 @@ const KEY = 'naowee.acreditaciones-module.estado';
 // Bitácoras del propio simulador: crecen sin parar y no son datos del evento.
 const VOLATILES = ['requests', 'unexpected', 'bucket'];
 
+// Nombre del evento de la demo (decisión del 24-nov): el contrato trae el de staging y se renombra al entregar cada respuesta.
+const RENOMBRES: Array<[string, string]> = [
+  ['Juegos Intercolegiados 2026 - Mini migración STG', 'Juegos Intercolegiados'],
+  ['Fase Eliminatoria', 'Fase Regional']
+];
+const renombrar = (t: string) => RENOMBRES.reduce((a, [de, a2]) => a.split(de).join(a2), t);
+
 type Handler = (route: unknown) => unknown;
 type Estado = Record<string, unknown>;
 
@@ -42,6 +49,10 @@ export function installGateway(): void {
   const listo: Promise<Estado> = interceptGateway(fakePage).then((estado: Estado) => {
     const previo = guardado();
     if (previo) Object.assign(estado, previo);
+    // Las pantallas propias de la demo (JS plano en mobile/apps/acreditaciones/assets) leen y escriben el estado del simulador.
+    const w = window as unknown as Record<string, unknown>;
+    w.__ACRED_ESTADO__ = estado;
+    w.__ACRED_PERSISTIR__ = () => persistir(estado);
     return estado;
   });
 
@@ -75,7 +86,8 @@ export function installGateway(): void {
         method: () => gw.method,
         postDataJSON: () => json
       }),
-      fulfill: ({ status, contentType, body: text }: { status: number; contentType: string; body: string }) => {
+      fulfill: ({ status, contentType, body: cuerpo }: { status: number; contentType: string; body: string }) => {
+        const text = renombrar(cuerpo);
         const set = (k: string, v: unknown) =>
           Object.defineProperty(this, k, { value: v, configurable: true });
         set('readyState', 4);

@@ -28,6 +28,10 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
    de la campana del producto (posición medida en JS, ver posSolo). */
 body.solo .brand,body.solo #casosBtn{display:none}
 body.solo .top{position:fixed;top:var(--solo-t,12px);right:var(--solo-r,24px);min-height:0;padding:0;border:0;background:none;z-index:40}
+/* DC-018 · con un modal abierto en la plataforma, el interruptor queda DETRÁS del overlay (en su lugar): se tiñe y se desenfoca igual que el contenido y no recibe clics. */
+/* Sin transiciones ni hover bajo el overlay: se tiñe en el MISMO instante que el resto (como el chip de perfil), sin animarse. */
+body.solo.bajo-overlay #planaBtn{pointer-events:none;position:relative;transition:none;background:#fff;border-color:#D0D4E6}
+body.solo.bajo-overlay #planaBtn::after{content:"";position:absolute;inset:-1px;border-radius:inherit;background:rgba(0,43,91,.45);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);pointer-events:none}
 body.solo .stage{padding:0;display:block}
 body.solo .holder{--k:1!important;width:100vw;height:100dvh}
 body.solo .win{width:100%;height:100%;border-radius:0;box-shadow:none;transform:none}
@@ -150,14 +154,18 @@ body.solo #casosHost,body.solo .vpsel,body.solo .vistas{display:none}
   const posSolo = () => {
     if (!document.body.classList.contains("solo")) return;
     try {
-      const c = $("app").contentDocument.querySelector(".wtop-bellw"); if (!c) return;
+      const c = $("app").contentDocument.querySelector(".ish-evento:not([hidden]), .wtop-bellw, .ish-bellw"); if (!c) return;
       const r = c.getBoundingClientRect(), t = document.querySelector(".top");
       document.body.style.setProperty("--solo-r", Math.round(innerWidth - r.left + 12) + "px");
       document.body.style.setProperty("--solo-t", Math.round(r.top + r.height / 2 - t.offsetHeight / 2) + "px");
     } catch (_) {}
   };
+  // ¿Hay un modal abierto dentro de la plataforma? (mismo origen: se lee su documento)
+  const bajoOverlay = () => { let on = false; try { on = document.body.classList.contains("solo") && !!$("app").contentDocument.querySelector(".nwt-modal--visible"); } catch (_) {} document.body.classList.toggle("bajo-overlay", on); };
+  setInterval(bajoOverlay, 500); // respaldo; el cambio inmediato lo da el observador del documento (ver «load»)
   addEventListener("resize", posSolo);
-  const plana = (on) => { document.body.classList.toggle("solo", on); $("planaBtn").setAttribute("aria-checked", on); if (on) { const w = $("app").contentWindow; if (w && w.WebCasos) w.WebCasos.close(); requestAnimationFrame(posSolo); } };
+  setInterval(posSolo, 400); // el contenido del encabezado cambia al cambiar de pantalla; posSolo no hace nada fuera de la vista plana
+  const plana = (on) => { document.body.classList.toggle("solo", on); bajoOverlay(); $("planaBtn").setAttribute("aria-checked", on); if (on) { const w = $("app").contentWindow; if (w && w.WebCasos) w.WebCasos.close(); requestAnimationFrame(posSolo); } };
   /* El estado lo lee la plataforma (web-estados.js) del mismo localStorage al cargar. */
   const EK = "naowee.web.estado";
   try { $("estSel").value = localStorage.getItem(EK) || "normal"; } catch (_) {}
@@ -176,6 +184,7 @@ body.solo #casosHost,body.solo .vpsel,body.solo .vistas{display:none}
       const d = $("app").contentDocument; d.addEventListener("keydown", salir); /* el iframe no propaga teclas */
       const sync = () => { const v = d.documentElement.classList.contains("wc-abierto"); $("casosBtn").setAttribute("aria-expanded", v); document.body.classList.toggle("panel-open", v); };
       new MutationObserver(sync).observe(d.documentElement, { attributes: true, attributeFilter: ["class"] }); sync();
+      new MutationObserver(bajoOverlay).observe(d.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] }); bajoOverlay(); /* al instante, en el mismo cuadro que el overlay */
     } catch (_) {}
   });
 })();

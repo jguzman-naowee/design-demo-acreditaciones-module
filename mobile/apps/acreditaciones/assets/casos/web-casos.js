@@ -54,6 +54,8 @@
   if (host) {
     const pd = window.parent.document, css = new URL("assets/casos/web-casos.css", document.baseURI).href;
     if (!pd.querySelector('link[href="' + css + '"]')) { const l = pd.createElement("link"); l.rel = "stylesheet"; l.href = css; pd.head.appendChild(l); }
+    /* El resaltado (velo, marca y cursor) vive en la pantalla del iframe: necesita la hoja de estilos también aquí. */
+    if (!document.querySelector('link[href="' + css + '"]')) { const l = document.createElement("link"); l.rel = "stylesheet"; l.href = css; document.head.appendChild(l); }
     host.replaceChildren(panel, flota); document.body.append(velo, spot, cur, lanzador);
   } else document.body.append(velo, panel, flota, spot, cur, lanzador);
   const lista = panel.querySelector(".wc-lista"), det = panel.querySelector(".wc-det"), say = flota.querySelector(".wc-say"), cnt = flota.querySelector(".wc-cnt");
@@ -83,9 +85,11 @@
     return base + (p || "/") + "?" + (q ? q + "&" : "") + "_r=" + Date.now() + (h != null ? "#" + h : "");
   };
   const rectOf = (el) => el.getBoundingClientRect();
-  const find = async (sel) => {
-    let el = document.querySelector(sel);
-    for (let n = 0; !el && n < 30; n++) { await sleep(100); el = document.querySelector(sel); }
+  /* Primer elemento que se ve: la app deja nodos ocultos con las mismas clases (pantallas anteriores) y el primero no sirve para resaltar. */
+  const visible = (sel, txt) => { const l = [...document.querySelectorAll(sel)]; return l.find((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && (!txt || (e.textContent || "").includes(txt)); }) || null; };
+  const find = async (sel, txt) => {
+    let el = visible(sel, txt);
+    for (let n = 0; !el && n < 30; n++) { await sleep(100); el = visible(sel, txt); }
     if (!el) throw new Error("No se encontró «" + sel + "» en la pantalla.");
     return el;
   };
@@ -119,8 +123,8 @@
     if (S.mode !== "paso" || S.busy || !st || st.t === "goto" || !st.sel) return;
     const my = S.token;
     try {
-      let el = document.querySelector(st.sel);
-      for (let n = 0; !el && n < 10; n++) { await sleep(150); if (my !== S.token || S.busy || S.mode !== "paso") return; el = document.querySelector(st.sel); }
+      let el = visible(st.mira || st.sel, st.txt);
+      for (let n = 0; !el && n < 10; n++) { await sleep(150); if (my !== S.token || S.busy || S.mode !== "paso") return; el = visible(st.mira || st.sel, st.txt); }
       if (!el) return;
       const r = await focus(el);
       if (my !== S.token || S.busy || S.mode !== "paso") return;
@@ -137,14 +141,37 @@
       location.replace(aUrl(st.url || ""));
       await new Promise(() => {}); /* la página se descarga */
     }
-    const el = await find(st.sel), r = await focus(el);
-    if (st.t === "click") {
-      S.fxClick = true; cur.hidden = false; ponCursor(r);
-      await sleep(RM ? 0 : 650);
-      cur.classList.add("press"); await sleep(RM ? 0 : 300); cur.classList.remove("press");
-      el.click(); hideFx();
-      await sleep(RM ? 0 : 400);
+    /* El campo de archivo va oculto: se resalta su botón (st.mira) y el archivo se pone en el campo. */
+    if (st.t === "prepara") {
+      /* Deja el ejemplo como quedó tras los recorridos anteriores: repite sus acciones a toda prisa y sin resaltar. */
+      S.fast = true;
+      try {
+        for (const id of st.ids) for (const x of (CASOS.find((c) => c.id === id) || { steps: [] }).steps) { if (x.ent || ["goto", "note", "prepara"].includes(x.t)) continue; await runStep(x); }
+      } finally { S.fast = false; }
+      return;
     }
+    const F = S.fast, el = await find(st.mira || st.sel, st.txt), r = F ? null : await focus(el);
+    if (st.t === "click") {
+      if (!F) { S.fxClick = true; cur.hidden = false; ponCursor(r); await sleep(RM ? 0 : 650); cur.classList.add("press"); await sleep(RM ? 0 : 300); cur.classList.remove("press"); }
+      el.click(); hideFx();
+      await sleep(F ? 140 : RM ? 0 : 400);
+    } else if (st.t === "type" || st.t === "select" || st.t === "file") {
+      /* Rellenar: se pone el valor y se avisa a la pantalla con los mismos eventos que lanza una persona. */
+      if (!F) await sleep(RM ? 0 : 500);
+      if (st.t === "file") {
+        const dt = new DataTransfer(); dt.items.add(new File([st.contenido || ""], st.nombre || "ejemplo.svg", { type: st.mime || "image/svg+xml" }));
+        const inp = document.querySelector(st.sel); inp.files = dt.files; inp.dispatchEvent(new Event("change", { bubbles: true }));
+      } else {
+        if (st.t === "type") el.focus();
+        let v = st.value;
+        if (st.t === "select" && st.opcion) { const o = [...el.options].find((x) => x.textContent.includes(st.opcion)); if (!o) throw new Error("No hay la opción «" + st.opcion + "» en la lista."); v = o.value; }
+        const proto = el instanceof HTMLSelectElement ? HTMLSelectElement.prototype : HTMLInputElement.prototype;
+        Object.getOwnPropertyDescriptor(proto, "value").set.call(el, v);
+        el.dispatchEvent(new Event("input", { bubbles: true })); el.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      hideFx();
+      await sleep(F ? 140 : RM ? 0 : 450);
+    } else if (F) await sleep(60);
   }
 
   const paint = () => {
