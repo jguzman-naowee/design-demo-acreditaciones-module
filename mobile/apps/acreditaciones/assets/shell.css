@@ -77,6 +77,18 @@ html.shell-colapsado .ish-top{left:var(--ish-wc)}
 .ish-dd-item:hover{background:var(--ish-hover)}
 .ish-dd-item svg{width:18px;height:18px;color:var(--ish-text2);flex:none}
 .ish-avisos{width:300px;padding:18px 20px}.ish-avisos h2{margin:0 0 6px;font-size:15px}.ish-avisos p{margin:0;font-size:13px;color:var(--ish-text2)}
+.ish-info{display:flex}
+/* Selector de perfiles: misma anatomía que el de Incentivos (profile-switcher). */
+.ish-perfiles{width:260px}
+.ish-perfil{min-height:44px;font-weight:500}
+.ish-ring--s{width:28px;height:28px;font-size:11px;flex:none}
+.ish-perfil-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ish-perfil-txt b{font-size:12px}  /* DC-004 */
+.ish-perfil-txt small{font-size:11px;font-weight:500;color:var(--ish-text2)}
+.ish-perfil>svg:last-child{width:16px;height:16px;margin-left:auto;opacity:0;flex:none}
+.ish-perfil.on{background:#ffedc7;color:var(--ish-accent);font-weight:700}
+.ish-perfil.on>svg:last-child{opacity:1;color:var(--ish-accent)}
+.ish-chip:focus-visible,.ish-perfil:focus-visible{outline:2px solid var(--ish-accent);outline-offset:2px}
 @keyframes ishDd{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 
 /* Pie flotante */
@@ -102,3 +114,69 @@ html.con-shell .nwt-stat-card__icon .nwt-icon{display:flex}
 /* Chip de usuario sin menú (ya no hay «Cambiar de evento»): no es interactivo */
 .ish-chip--fijo{cursor:default}
 .ish-chip--fijo:hover{background:inherit;border-color:inherit}
+
+/* DC-002 · La barra de evento vive en una columna flex de alto fijo y el micro le deja `min-height:0`: cuando la tabla
+   pide espacio, la barra se encogía (de 73px a 33px) y su contenido se montaba sobre el título. No debe encogerse. */
+html.con-shell .nws-event-bar{flex:none}
+
+/* DC-003 · Paginadores abajo, en todas las tablas: la fila de filtros se "disuelve" y el paginador (solo, o junto al
+   selector de filas por página) pasa a una línea propia bajo la tabla. Solo CSS: el micro no se toca. */
+html.con-shell .nwt-card__content:has(> [class*="__filters"] .nwt-pagination){flex-direction:row;flex-wrap:wrap;align-items:center;column-gap:12px}
+html.con-shell .nwt-card__content > [class*="__filters"]:has(.nwt-pagination){display:contents}
+html.con-shell .nwt-card__content:has(> [class*="__filters"] .nwt-pagination) > .nwt-tag-group{flex:0 0 100%}
+html.con-shell .nwt-card__content:has(> [class*="__filters"] .nwt-pagination) > .nwt-datatable{order:2;flex:0 0 100%;min-width:0}
+html.con-shell .nwt-card__content > [class*="__filters"] > .nwt-pagination,
+html.con-shell .nwt-card__content > [class*="__filters"] > .nws-page-size{order:3;flex:0 0 100%;justify-content:flex-end}
+
+/* Selector de eventos (ruta «/»): sin panel lateral; los logos pasan al encabezado. Con un evento elegido el panel aparece. */
+.ish-brand{display:none;align-items:center;gap:14px;margin-right:auto}
+html.shell-sin-panel .ish-brand{display:flex}
+html.shell-sin-panel .ish-side{display:none}
+html.shell-sin-panel .ish-top{left:0}
+html.con-shell.shell-sin-panel #root{margin-left:0}
+
+/* Opción C · el evento activo como chip en el encabezado. El selector «Evento · Fase / Cambiar» del micro se esconde; si la
+   barra trae el retrato de la pantalla (contadores de Auditoría) se queda con eso, y si no, desaparece entera. */
+.ish-evento{display:flex;align-items:center;gap:8px;max-width:380px;min-height:44px;padding:0 16px;border:1px solid var(--ish-border-dark);border-radius:999px;background:#fff;color:var(--ish-text);font:600 13px/1 var(--ish-font);white-space:nowrap;transition:border-color .15s}
+.ish-evento[hidden]{display:none}
+.ish-evento:hover{border-color:var(--ish-text2)}.ish-evento:focus-visible{outline:2px solid var(--ish-accent);outline-offset:2px}
+.ish-ev-n{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ish-ev-f{color:var(--ish-text2);font-weight:500;flex:none}
+.ish-ev-e{display:flex;color:var(--ish-accent);flex:none}
+html.con-shell .nws-event-bar .nws-event-selector{display:none}
+html.con-shell .nws-event-bar:not(:has(.nwt-detail-group)){display:none}
+@media (max-width:1100px){.ish-ev-f{display:none}}
+
+/* Pantallas propias de la demo: ocupan el lugar de #root (que se oculta) con el mismo marco. */
+html.pantalla-propia #root{display:none}
+.ish-pantalla{position:relative;margin-left:var(--ish-w);padding-top:var(--ish-h);padding-bottom:76px;box-sizing:border-box;min-height:100vh;transition:margin-left .36s cubic-bezier(.32,.72,0,1)}
+.ish-pantalla[hidden]{display:none}
+html.shell-colapsado .ish-pantalla{margin-left:var(--ish-wc)}
+html.shell-sin-panel .ish-pantalla{margin-left:0}
+@media (max-width:899px){.ish-pantalla{margin-left:0;padding-top:0}}
+
+/* Fondo de los modales (DC-005): azul oscuro al 45 %, en lugar del naranja del tema. Aplica también a los modales propios. */
+html.con-shell .nwt-modal__backdrop{background:#002B5B73}
+
+/* Encabezado de tablas (referencia): el buscador es una píldora de borde suave; los filtros siguen con borde marcado */
+html.con-shell .nwt-searchbox .nwt-input-box__control{border-radius:999px;border-color:var(--ish-border-dark)}
+/* Filtro de estado de «Tipos de acreditados»: «Estado: Todos» */
+html.con-shell .nws-accredited-types__filters .nwt-dropdown .nwt-dropdown__content::before{content:"Estado:";margin-right:6px;font-size:14px;color:var(--ish-text)}
+/* Aire entre los filtros y el inicio de la tabla, igual que en las pantallas propias */
+html.con-shell .nwt-card__content > .nwt-datatable{margin-top:var(--naotech-sizing-8,8px)}
+
+/* El menú de tres puntos de las filas va en negro (tablas del micro y propias) */
+html.con-shell .nwt-datatable__cell--actions .nwt-icon-button{--naotech-icon-color:#000;color:#000}
+html.con-shell .nwt-datatable__cell--actions .nwt-icon-button .nwt-icon,html.con-shell .nwt-datatable__cell--actions .nwt-icon-button i{color:#000}
+
+/* DC-014 · fila de fase del selector de eventos: flecha en cascada y texto más hacia adentro */
+html.con-shell .nws-event-entry__phases-row{position:relative;padding-left:72px}
+html.con-shell .nws-event-entry__phases-row::before{content:"";position:absolute;left:42px;top:50%;width:18px;height:18px;transform:translateY(-65%);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23646587' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 4v7a3 3 0 003 3h11M15 10l4 4-4 4'/%3E%3C/svg%3E") no-repeat center/contain}
+
+/* Tablas del micro: la tarjeta completa el alto de la pantalla cuando hay pocos datos; el paginado queda abajo */
+html.con-shell .nwt-app__body > section[class*="nws-"]{display:flex;flex-direction:column;box-sizing:border-box;min-height:calc(100vh - var(--ish-h) - 76px)}
+html.con-shell .nwt-app__body > section[class*="nws-"] > [class$="__content"]{flex:1;display:flex;flex-direction:column;min-height:0}
+html.con-shell .nwt-app__body > section[class*="nws-"] > [class$="__content"] > .nwt-card{flex:1;display:flex;flex-direction:column}
+html.con-shell .nwt-app__body > section[class*="nws-"] > [class$="__content"] > .nwt-card > .nwt-card__body{flex:1;display:flex;flex-direction:column}
+html.con-shell .nwt-app__body > section[class*="nws-"] > [class$="__content"] > .nwt-card .nwt-card__content{flex:1}
+html.con-shell .nwt-app__body > section[class*="nws-"] > [class$="__content"] > .nwt-card .nwt-card__content{align-content:flex-start}

@@ -23,6 +23,8 @@ Abre http://localhost:8770/web/?app=acreditaciones. Un recargue conserva los dat
 Las pantallas vivas del menú del micro, todas conectadas al contrato congelado del gateway:
 Permisos de acceso, Tipos de acreditados, Certificados (configuración y entrega), Gestión de
 acreditables, Lista de acreditados, Lotes de carnets y Auditoría del evento.
+**Pantallas propias de la demo** (no están en el micro; JS plano, sin compilar, en `mobile/apps/acreditaciones/assets/`): «Categorías» (organización del tipo de acreditado —COJNJ, Mindeporte…— con siglas y color; se elige al crear el tipo), «Permisos de acceso» en dos pestañas: Zonas (indicativo único) y Servicios (ícono), «Formularios de registro» (creador sencillo: preguntas abiertas, selectores y archivos; catálogo en `localStorage`), «Tipos de acreditados» (reemplaza la del micro: la función es un selector al que se pueden agregar funciones nuevas), «Permisos de acceso» (catálogo, con etiquetas en el formulario; reemplaza a la del micro, cuyo «Crear» falla en la demo) y «Usuarios» (administración GLOBAL, fuera de los eventos: sección «Plataforma» fija arriba del panel lateral con «Eventos» (todos los perfiles) y «Usuarios» (Gestor; el Operador de acreditaciones ve solo «Operadores externos»); al entrar en un evento se despliegan debajo las secciones del evento sin quitar las de arriba; perfiles Gestor de acreditaciones / Operador de acreditaciones / Operador externo / Validador; el externo es un tipo de acreditado con acceso (su tipo + los tipos que puede registrar) y no valida accesos; menú lateral por perfil; guarda en `naowee.acreditaciones.usuarios.v4`). Se abren con `#/<id>` y se montan sobre el micro, que no se toca; el catálogo se guarda en el estado del simulador (expuesto en `window.__ACRED_ESTADO__`) y la regla de validación vive en cada permiso (la pantalla «Validación» por tipo salió del menú; `validacion.js` queda sin cargar, para el futuro override por tipo). El micro manda cualquier ruta que no conoce al selector de eventos, por eso no usan rutas nuevas.
+
 **No incluye** las pantallas «próximas a borrar» del micro (lotes generados, historial, control de
 accesos, validar acceso, credencial de demo) ni «Ver credencial», oculta por decisión de producto.
 
@@ -46,3 +48,5 @@ declara en `falta` lo que no recorre.
 ## Reglas del marco
 
 `RULES.md`. Esta demo no es estática: el estado vive en `localStorage` del navegador.
+
+**Encabezado de las tablas:** buscador en píldora y filtro «Estado: Todos» arriba; el paginado va debajo de la tabla, a la derecha. Las pantallas propias (Permisos, Usuarios) comparten `filtroEstado` y `paginador` (`window.ACRED_DATOS`, definidos en `permisos.js`).

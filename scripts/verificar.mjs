@@ -17,6 +17,8 @@ const archivos = (dir) => readdirSync(dir).flatMap((n) => {
 const fuente = archivos(path.join(raiz, 'mf/src')).filter((f) => /\.(tsx?|scss)$/.test(f)).map((f) => readFileSync(f, 'utf8')).join('\n');
 const shell = readFileSync(path.join(app, 'assets/shell.js'), 'utf8');
 const css = readFileSync(path.join(app, 'assets/app.css'), 'utf8');
+// Las pantallas propias de la demo (JS plano) también aportan clases a los casos.
+const propias = ['validacion.js', 'validacion.css', 'permisos.js', 'tipos.js', 'categorias.js', 'formularios.js', 'usuarios.js', 'multiselect.js'].map((f) => readFileSync(path.join(app, 'assets', f), 'utf8')).join('\n');
 
 // Rutas del micro y del menú
 const rutasMicro = [...leer('mf/src/accreditations/presentation/AccreditationsApp.tsx').matchAll(/path="([^"]+)"/g)].map((m) => m[1]);
@@ -29,7 +31,7 @@ const ctx = { window: {} };
 vm.runInNewContext(readFileSync(path.join(app, 'casos.js'), 'utf8'), ctx);
 const casos = ctx.window.CASOS;
 check(casos.length > 0, `casos: ${casos.length} definidos`);
-const hay = (clase) => fuente.includes(clase) || shell.includes(clase) || css.includes(`.${clase}`);
+const hay = (clase) => fuente.includes(clase) || shell.includes(clase) || css.includes(`.${clase}`) || propias.includes(clase);
 for (const c of casos) {
   check(c.steps[0].t === 'goto', `caso ${c.id}: arranca con goto`);
   check(typeof c.falta === 'string' && c.falta.length > 0, `caso ${c.id}: declara lo que no hace`);

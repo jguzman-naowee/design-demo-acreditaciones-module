@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="es"><head>
+<link rel="icon" href="data:,"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Demo · Módulo de acreditaciones</title>
 <script>
 // Base de la app: sirve igual en localhost, bajo /design-demo-acreditaciones-module/ de GitHub Pages y dentro del marco.
@@ -10,9 +11,13 @@ document.write('<base href="'+(window.__BASE__||'')+'/">');
 <script>
 // «?reset=1» (lo usan los casos): datos y evento elegido vuelven al principio. Los de Pages piden la ruta con «?r=».
 try{var q=new URLSearchParams(location.search);
-if(q.has('reset')){localStorage.removeItem('naowee.acreditaciones-module.estado');localStorage.removeItem('naowee.acreditaciones.active-event');}
+if(q.has('reset')){localStorage.removeItem('naowee.acreditaciones-module.estado');localStorage.removeItem('naowee.acreditaciones.active-event');localStorage.removeItem('naowee.acreditaciones.validacion');localStorage.removeItem('naowee.acreditaciones.usuarios');localStorage.removeItem('naowee.acreditaciones.usuarios.v2');localStorage.removeItem('naowee.acreditaciones.usuarios.v3');localStorage.removeItem('naowee.acreditaciones.usuarios.v4');localStorage.removeItem('naowee.acreditaciones.formularios');localStorage.removeItem('naowee.acreditaciones.categorias');localStorage.removeItem('naowee.acreditaciones.tipos-nombres');}
 if(q.get('r')){history.replaceState(null,'',window.__BASE__+q.get('r'));}}catch(e){}
 </script>
-<link rel="stylesheet" href="assets/inter.css"><link rel="stylesheet" href="assets/google-sans.css"><link rel="stylesheet" href="assets/app.css"><link rel="stylesheet" href="assets/shell.css">
+<script>
+// Renombre del evento de la demo: lo que ya quedó guardado en el navegador con el nombre anterior se actualiza.
+try{['naowee.acreditaciones.active-event','naowee.acreditaciones-module.estado'].forEach(function(k){var v=localStorage.getItem(k);if(v&&(v.indexOf('Mini migraci')>-1||v.indexOf('Fase Eliminatoria')>-1)){localStorage.setItem(k,v.split('Juegos Intercolegiados 2026 - Mini migración STG').join('Juegos Intercolegiados').split('Fase Eliminatoria').join('Fase Regional'));}});}catch(e){}
+</script>
+<link rel="stylesheet" href="assets/inter.css"><link rel="stylesheet" href="assets/google-sans.css"><link rel="stylesheet" href="assets/app.css"><link rel="stylesheet" href="assets/shell.css?v=1795641775"><link rel="stylesheet" href="assets/validacion.css?v=1795641775">
 <style>html,body{margin:0;min-height:100%}#root{min-height:100vh}</style>
-</head><body><div id="root"></div><script type="module" src="assets/app.js"></script><script src="assets/shell.js"></script><script src="casos.js"></script><script src="assets/casos/web-casos.js"></script></body></html>
+</head><body><div id="root"></div><script type="module" src="assets/app.js"></script><script src="assets/shell.js?v=1795641775"></script><script src="assets/multiselect.js?v=1795641775"></script><script src="assets/permisos.js?v=1795641775"></script><script src="assets/categorias.js"></script><script src="assets/tipos.js?v=1795641775"></script><script src="assets/formularios.js"></script><script src="assets/usuarios.js?v=1795641775"></script><script src="casos.js?v=1795641775"></script><script src="assets/casos/web-casos.js"></script></body></html>
